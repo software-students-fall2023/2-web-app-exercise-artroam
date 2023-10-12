@@ -4,7 +4,7 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-See instructions. Delete this line and place the Product Vision Statement here.
+Artroam is a web application that empowers artists by providing a platform that serves as a vibrant, interactive canvas for creative expression. Here, we foster a global community of artists and art enthusiasts, where users can effortlessly showcase, discover, and connect with the world of art, whether it be through visual arts, digital art, photography and many more.
 
 ## User stories
 
