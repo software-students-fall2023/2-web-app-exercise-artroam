@@ -1,0 +1,51 @@
+.gridItem {
+    margin-bottom: 40px;
+}
+
+.statsContainer {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.artistContainer,
+.iconContainer,
+.iconStats {
+    display: flex;
+    align-items: center;
+}
+
+.artistContainer img {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.artistContainer span {
+   font-weight: 700;
+}
+
+.iconContainer {
+    width: 120px;
+    justify-content: space-between;
+}
+
+.iconStats .icon {
+    margin-right: 4px;
+}
+
+.previewContainer img {
+    width: 370px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.detailsContainer {
+    margin: 10px 0;
+}
+
