@@ -20,9 +20,9 @@ try:
     client.admin.command('ping')
     db = client[os.getenv('MONGO_DBNAME')]
     print("* Successfully connected to MongoDB!")
-except Exception as e:
+except Exception as err:
     print('Failed to connect to MongoDB at, ', os.getenv('MONGO_URI'))
-    print('Database error: ', e)
+    print('Database error: ', err)
 
 # Routes: 
 @app.route('/')
@@ -99,4 +99,4 @@ def login():
     return render_template('login.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='10000', debug=True)
+    app.run(debug=True)
