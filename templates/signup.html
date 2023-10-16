@@ -1,7 +1,28 @@
 {% extends, "base.html %}
 
 {% block content %}
-    <div class="content">
-        Sign Up
-    </div>    
+    <<div class="content">
+            <h1> Sign Up </h1>
+            <form method="POST" action="/signup">
+                <label for="username">Username: </label>
+                <input type="text" name="username" id="username" required><br>
+                <label for="email">Email: </label>
+                <input type="email" name="email" id="email" required><br>
+                <label for="password">Password (8-20 characters, with at least one number and one alphabet): </label>
+                <input type="password" name="password" id="password" required><br>
+                <label for="confirm_password">Confirm Password: </label>
+                <input type="password" name="confirm_password" id="confirm_password" required><br>
+                <button type="submit" name="submit" value="Sign Up">Submit</button>
+            </form>
+            <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
+        {% if errors %}
+            <div class="alert">
+                <ul>
+                    {% for message in errors %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}  
 {% endblock %}
