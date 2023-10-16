@@ -1,23 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <div class="logo">artroam</div>
-    </header>
-    <main>
-        <div class="content">
-            profile
-        </div>
-    </main>
-    <nav>
-        <a href="/">Explore</a>
-        <a href="/create">Create</a>
-        <a href="/gallery">Gallery</a>
-        <a href="/profile">Profile</a>
-    </nav>    
-</body>
-</html>
+{% extends, "base.html %}
+
+{% block content %}
+    <div class="content">
+        Profile
+    </div>    
+{% endblock %}

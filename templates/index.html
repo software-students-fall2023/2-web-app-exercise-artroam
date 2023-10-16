@@ -1,23 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <div class="logo">artroam</div>
-    </header>
-    <main>
-        <div class="content">
-            profile
+{% extends "base.html" %}
+
+{% block content%}
+    <span class="search-container">
+        <form action="/action_page.php">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit">Submit</button>
+        </form>
+    </span>
+    
+    <span class="filter_menu"">
+        <button>Filter</button>
+        <div class="filter_contents">
+            <!-- Need to add references to filter out content -->
+            <a href="">Digital Art</a>
+            <a href="">Photography</a>
+            <a href="">Visual Arts</a>
         </div>
-    </main>
-    <nav>
-        <a href="/">Explore</a>
-        <a href="/create">Create</a>
-        <a href="/gallery">Gallery</a>
-        <a href="/profile">Profile</a>
-    </nav>    
-</body>
-</html>
+    </span>
+
+    <section>
+        {% if artworks%}
+            {% for artwork in artworks %}
+            <div class="postContainer">
+                <div class="topContainer">
+                    <div class="artistContainer">
+                        <!-- {{artwork.profile_picture}} -->
+                        <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
+
+                        <!-- <span>{{artwork.username}}</span> -->
+                        <span>John Smith</span>
+
+                    </div>
+
+                    <div class="statsContainer">
+                        <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
+                        <!-- <span>{{artwork.likes}}</span> -->
+                        <span>16.1k</span>
+                    </div>
+                </div>
+
+                <div class="previewContainer">
+                    <!-- {{artwork.image}} -->
+                    <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
+                </div>
+
+                <div class="detailsContainer">
+                    <div class="descriptionText">
+                        <!-- {{artwork.description}} -->
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+
+        {% else %}
+        <p>Currently no artworks in the database</p>
+    </section>
+{% endblock %}
+
