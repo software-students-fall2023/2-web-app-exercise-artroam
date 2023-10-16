@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, make_response
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
@@ -33,9 +33,15 @@ def index():
 def create():
     return render_template('create.html')
 
-@app.route('/gallery')
+@app.route('/gallery', methods = ['GET','POST'])
 def gallery():
-    return render_template('gallery.html')
+    if request.method == 'POST':
+        images = request.form['image_uploads']
+        response = make_response(images, 200)
+        response.mimetype = "text/plain"
+        return response
+    else:
+        return render_template('gallery.html')
 
 @app.route('/profile')
 def profile():
