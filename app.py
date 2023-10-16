@@ -6,25 +6,25 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
 load_dotenv()
 
 # Create a new client and connect to the server
 client = MongoClient(os.getenv('MONGO_URI'), server_api=ServerApi('1'))
 
-# turn on debugging if in development mode
+# Turn on debugging if in development mode
 if os.getenv('FLASK_ENV', 'development') == 'development':
-    # turn on debugging, if in development
-    app.debug = True # debug mode
+    app.debug = True 
 
-# Send a ping to confirm a successful connection
+# Send a ping to confirm a successful connection else, print out the error
 try:
     client.admin.command('ping')
     db = client[os.getenv('MONGO_DBNAME')]
-    print("Pinged your deployment. You successfully connected to MongoDB!")
+    print("* Successfully connected to MongoDB!")
 except Exception as e:
-    print(e)
+    print('Failed to connect to MongoDB at, ', os.getenv('MONGO_URI'))
+    print('Database error: ', e)
 
+# Routes: 
 @app.route('/')
 def index():
     return render_template('index.html')
