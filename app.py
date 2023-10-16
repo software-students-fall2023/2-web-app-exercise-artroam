@@ -55,6 +55,7 @@ def profile():
     
     #feel free to change / edit, just a placeholder to ensure we don't forget!
 
+#backend code for signup page
 @app.route('/signup', methods = ['GET','POST'])
 def signup():
     if 'user_id' in session:
