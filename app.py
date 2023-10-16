@@ -1,32 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
+from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
 load_dotenv()
 
 # Create a new client and connect to the server
 client = MongoClient(os.getenv('MONGO_URI'), server_api=ServerApi('1'))
 
-# turn on debugging if in development mode
+# Turn on debugging if in development mode
 if os.getenv('FLASK_ENV', 'development') == 'development':
-    # turn on debugging, if in development
-    app.debug = True # debug mode
+    app.debug = True 
 
-# Send a ping to confirm a successful connection
+# Send a ping to confirm a successful connection else, print out the error
 try:
     client.admin.command('ping')
     db = client[os.getenv('MONGO_DBNAME')]
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+    print("* Successfully connected to MongoDB!")
+except Exception as err:
+    print('Failed to connect to MongoDB at, ', os.getenv('MONGO_URI'))
+    print('Database error: ', err)
 
+# Routes: 
 @app.route('/')
 def index():
+    # artworks = db.artposts.find({}).sort("created_at", -1)
     return render_template('index.html')
 
 @app.route('/create')
