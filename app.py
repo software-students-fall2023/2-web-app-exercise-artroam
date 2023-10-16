@@ -27,7 +27,8 @@ except Exception as e:
 # Routes: 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    artworks = db.artposts.find({}).sort("created_at", -1)
+    return render_template('index.html', artworks=artworks)
 
 @app.route('/create')
 def create():
