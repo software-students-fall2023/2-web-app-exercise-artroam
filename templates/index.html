@@ -19,129 +19,42 @@
     </span>
 
     <section>
-        {% for artwork in artworks %}
-        <div class="postContainer">
-            <div class="topContainer">
-                <div class="artistContainer">
-                    {{artwork.profile_picture}}
-                    <span>{{artwork.username}}</span>
+        {% if artworks%}
+            {% for artwork in artworks %}
+            <div class="postContainer">
+                <div class="topContainer">
+                    <div class="artistContainer">
+                        <!-- {{artwork.profile_picture}} -->
+                        <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
+
+                        <!-- <span>{{artwork.username}}</span> -->
+                        <span>John Smith</span>
+
+                    </div>
+
+                    <div class="statsContainer">
+                        <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
+                        <!-- <span>{{artwork.likes}}</span> -->
+                        <span>16.1k</span>
+                    </div>
                 </div>
 
-                <div class="statsContainer">
-                    <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                    <span>{{artwork.views}}</span>
+                <div class="previewContainer">
+                    <!-- {{artwork.image}} -->
+                    <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
                 </div>
 
-                <div class="statsContainer">
-                    <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                    <span>{{artwork.likes}}</span>
+                <div class="detailsContainer">
+                    <div class="descriptionText">
+                        <!-- {{artwork.description}} -->
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </div>
                 </div>
             </div>
+            {%endfor%}
 
-            <div class="previewContainer">
-                {{artwork.image}}
-            </div>
-
-            <div class="detailsContainer">
-                <div class="descriptionText">
-                    {{artwork.description}}
-                </div>
-            </div>
-        </div>
-        {%endfor%}
+        {% else %}
+        <p>Currently no artworks in the database</p>
     </section>
 {% endblock %}
 
-<!-- <div style="margin-bottom: 75px;;"></div>    
-<div class="gridItem">
-    <div class="statsContainer">
-        <div class="artistContainer">
-            <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
-            <span>John Smith</span>
-        </div>
-
-        <div class="iconContainer">
-            <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                <span>747</span>
-            </div>
-
-            <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58;"></i>
-                <span>16.1k</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="previewContainer">
-        <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
-    </div>
-
-    <div class="detailsContainer">
-        <div class="descriptionText">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
-    </div>
-</div>
-
-<div class="gridItem">
-    <div class="statsContainer">
-        <div class="artistContainer">
-            <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
-            <span>John Smith</span>
-        </div>
-
-        <div class="iconContainer">
-            <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                <span>747</span>
-            </div>
-
-            <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58;"></i>
-                <span>16.1k</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="previewContainer">
-        <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
-    </div>
-
-    <div class="detailsContainer">
-        <div class="descriptionText">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
-    </div>
-</div>
-
-<div class="gridItem">
-    <div class="statsContainer">
-        <div class="artistContainer">
-            <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
-            <span>John Smith</span>
-        </div>
-
-        <div class="iconContainer">
-            <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                <span>747</span>
-            </div>
-
-            <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58;"></i>
-                <span>16.1k</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="previewContainer">
-        <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
-    </div>
-
-    <div class="detailsContainer">
-        <div class="descriptionText">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
-    </div>
-</div> -->
