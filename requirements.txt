@@ -2,5 +2,6 @@ Flask>=2.2.2
 pymongo==4.5.0
 python-dotenv==0.16.0
 Werkzeug==3.0.0
+Flask-Session
 
 # write all dependencies in requirements.txt
