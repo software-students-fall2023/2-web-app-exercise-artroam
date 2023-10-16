@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 load_dotenv()
