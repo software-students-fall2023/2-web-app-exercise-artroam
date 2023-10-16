@@ -10,16 +10,38 @@
     </header>
     <main>
         <div class="content">
-            gallery
+            <h1> Login </h1>
+            <form method="POST" action="/login_auth">
+                <label for="username">Username: </label>
+                <input type="text" name="username" id="username" required><br>
+                <label for="password">Password: </label>
+                <input type="password" name="password" id="password" required><br>
+                <button type="submit" name="submit" value="Log in">Submit</button>
+            </form>
+            <p>Don't have an account? <a href="/signup">Sign Up</a></p>
         </div>
+        {% if errors %}
+            <div class="alert">
+                <ul>
+                    {% for message in errors %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </main>
     <nav>
         <a href="/">Explore</a>
         <a href="/create">Create</a>
         <a href="/gallery">Gallery</a>
         <a href="/profile">Profile</a>
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
     </nav>    
 </body>
 </html>
 
 <!-- add a hyperlink to the forgot password page and figure out what sort of validation is needed. -->
+<!-- add a hyperlink to the sign up page "dont have an acc... sign up!"-->
+<!-- on the submit button, have a POST request to the login_auth route-->
