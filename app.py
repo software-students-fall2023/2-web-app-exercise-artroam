@@ -51,7 +51,7 @@ def profile():
     if 'user_id' in session:
         return render_template('profile.html') 
     else:
-        return "Please log in first!"
+        return render_template('login.html')
     
     #feel free to change / edit, just a placeholder to ensure we don't forget!
 
