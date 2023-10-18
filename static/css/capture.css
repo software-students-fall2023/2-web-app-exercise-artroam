@@ -1,0 +1,79 @@
+#camera-container {
+    position: relative;
+    text-align: center; 
+    padding: 0 1em; 
+}
+
+#camera-feed, #captured-photo, #image-container{
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto; 
+    top: 0;
+    left: 0;
+}
+
+#buttons, #options {
+    text-align: center;
+    padding: 1em;
+}
+
+#retake-button, #next-button {
+    display: none;
+}
+
+.comment-box {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#comment {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.image-container img {
+    max-width: 100%; 
+    height: auto; 
+}
+
+@media screen and (max-width: 768px) {
+
+    #buttons, #options {
+        bottom: 5px;
+        left: 0; 
+        text-align: center;
+        padding: 1em;
+    }
+
+    .comment-box {
+        padding: 5px;
+    }
+
+    #comment {
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .image-container {
+        text-align: center; 
+    }
+
+    .image-container img {
+        max-width: 100%; 
+        height: auto; 
+    }
+}
+
+@media (min-width: 769px) {
+    #camera-container {
+        max-width: 640px;
+        margin: 0 auto;
+    }
+}

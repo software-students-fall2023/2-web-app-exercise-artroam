@@ -3,8 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='style.css')}}">
-        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='explore.css')}}">
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
         <title>ArtRoam</title>
     </head>
 
@@ -18,7 +17,7 @@
         </main>
 
         <nav>
-            <a href="{{url_for('home')}}">Explore</a>
+            <a href="{{url_for('index')}}">Explore</a>
             <a href="{{url_for('create')}}">Create</a>
             <a href="{{url_for('gallery')}}">Gallery</a>
             <a href="{{url_for('profile')}}">Profile</a>
