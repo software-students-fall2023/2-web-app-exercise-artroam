@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block container %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/capture.css') }}">
+
+<form action="{{ url_for('create') }}" method="post">
+    <button type="submit">Go Back</button>
+</form>
+
+<div class="image-container">
+    {% if image_url %}
+        <img src="{{ image_url }}" alt="Uploaded Image">
+    {% else %}
+        <img src="/static/images/placeholder.png" alt="Placeholder Image">
+    {% endif %}
+</div>
+
+<form action="{{ url_for('post_data') }}" method="post">
+    <div class="comment-box">
+        <textarea name="post_description" id="comment" rows="4" cols="50"></textarea>
+    </div>
+    <button type="submit" id="submit-post">Submit</button>
+</form>
+
+{% endblock %}
