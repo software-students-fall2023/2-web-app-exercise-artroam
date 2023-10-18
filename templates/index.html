@@ -1,55 +1,50 @@
 {% extends 'base.html' %}
-
 {% block container %}
-    <div class="content">Home/Explore</div>
+<div class="content">Home/Explore</div>
 
-    <span class="search_container">
-        <form action="">
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit">Submit</button>
-        </form>
-    </span>
-    
-    <span class="filter_menu"">
-        <button>Filter</button>
-        <div class="filter_contents">
-            <!-- Need to add references to filter out content -->
-            <a href="">Digital Art</a>
-            <a href="">Photography</a>
-            <a href="">Visual Arts</a>
+<span class="search_container">
+    <form action="">
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit">Submit</button>
+    </form>
+</span>
+
+<span class="filter_menu">
+    <button>Filter</button>
+    <div class="filter_contents">
+        <!-- Add references to filter out content -->
+        <a href="">Digital Art</a>
+        <a href="">Photography</a>
+        <a href="">Visual Arts</a>
+    </div>
+</span>
+<section>
+    {% if artworks %}
+    {% for artwork in artworks %}
+    <div class="postContiner">
+        <div class="profileContainer">
+            <div class="artistContainer">
+                <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
+                <span>{{artwork.username}}</span>
+            </div>
+
+            <div class="likesContainer">
+                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                <span>{{artwork.likes}}</span>
+            </div>
         </div>
-    </span> 
 
-    <section>
-        {% if artworks %}
-            {% for artwork in artworks %}
-                <div class="postContiner">
-                    <div class="profileContainer">
-                        <div class="artistContainer">
-                            <!-- {{artwork.profile_picture}} -->
-                            <img src="{{url_for('static', filename='images/avatar.png')}}">
-                            <span>{{artwork.username}}</span>
-                        </div>
+        <div class="artContainer">
+            <img src="{{artwork.image_url}}">
+        </div>
 
-                        <div class="likesContainer">
-                            <i class="fa-solid fa-star icon" style="color: #464d58"></i>
-                            <span>{{artwork.likes}}</span>
-                        </div>
-                    </div>
-
-                    <div class="artContainer">
-                        <!-- {{artwork.image}} -->
-                        <img src="{{url_for('static', filename='images/22-06-05-1.jpeg')}}">
-                    </div>
-
-                    <div class="detailsContainer">
-                        <div>{{artwork.description}}</div>
-                    </div>
-                </div>
-            {% endfor %}
-
-        {% else %}
-        <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks in the database</p>
-        {% endif %}
-    </section>
+        <div class="detailsContainer">
+            <div>{{artwork.post_description}}</div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks in the database</p>
+    {% endif %}
+</section>
 {% endblock %}

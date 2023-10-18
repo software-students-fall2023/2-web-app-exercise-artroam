@@ -1,10 +1,13 @@
-from flask import Flask, url_for, redirect, render_template, make_response, session, request
+from flask import Flask, url_for, redirect, render_template, make_response, session, request,  jsonify, abort
 from flask_session import Session
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
 from bson.objectid import ObjectId   
+import boto3
+import uuid
+import datetime
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -14,38 +17,128 @@ load_dotenv()
 # This secret key is essential for the proper functioning of user sessions in your Flask application.
 # This is essentially when users sign into their account, it simply creates a private session for them (for security and privacy reasons)
 sess = Session()
-app.secret_key = 'super secret key'
+app.secret_key = os.getenv('APP_SECRET_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 sess.init_app(app)
+
+# AWS S3 Bucket Configuration 
+s3 = boto3.client('s3', region_name='us-east-1', 
+                  aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'), 
+                  aws_secret_access_key= os.getenv('AWS_SECRET_ACCESS_KEY'))
 
 # Checks that if the FLASK_ENV is in development, we switch on debugging
 if os.getenv('FLASK_ENV', 'development') =='development':
     app.debug = True
 
 # Establish a database connection with the MONGO_URI (MongoDB Atlas connection)
-db_cxn = MongoClient(os.getenv('MONGO_URI'))
+client = MongoClient(os.getenv('MONGO_URI'))
+database = client[os.getenv('MONGO_DBNAME')]
 
 # Checks if the connection has been made, else make an error printout
 try:
-    db_cxn.admin.command('ping')                
-    database = db_cxn[os.getenv('MONGO_DBNAME')]      
+    database.admin.command('ping')                
+    database = database[os.getenv('MONGO_DBNAME')]      
     print('* Connected to MongoDB!')         
 
 except Exception as err:
     print('* "Failed to connect to MongoDB at', os.getenv('MONGO_URI'))
     print('Database connection error:', err) 
 
+# Helper func
+def generate_unique_filename(original_filename):
+    extension = original_filename.split('.')[-1]
+    unique_filename = "{}-{}.{}".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), uuid.uuid4(), extension)
+    
+    return unique_filename
+
 # Routes: 
-# Default home route which will be the explore page
+# Default home route which will be the explore page         
 @app.route('/')
 def home(): 
-    artworks = database.artposts.find({}).sort("created_at", -1)
-    return render_template('index.html', artworks=artworks)
+    artworks = database.posts.find({}).sort("created_at", -1)
+    return render_template('index.html', artworks = artworks)
 
-# Create Page: Users can post artworks
-@app.route('/create')
-def create(): 
+@app.route('/create', methods=['POST', 'GET'])
+def create():
+    session['image_on_post_page'] = False
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+
+            if 'image' in data:
+                import base64
+                image_data = base64.b64decode(data['image'].split(",")[-1])
+                file_name = generate_unique_filename("image.jpg")
+                s3.put_object(Bucket=os.getenv('BUCKET_NAME'), Key=file_name, Body=image_data, ContentType='image/jpeg')
+                
+                session['uploaded_file_key'] = file_name
+                session['image_viewed'] = False 
+                session['image_on_post_page'] = False
+
+                redirect_url = url_for('post')
+                return jsonify({'redirect': redirect_url})
+
     return render_template('create.html')
+
+
+@app.route('/post', methods=['POST', 'GET'])
+def post():
+    try:
+        session['image_on_post_page'] = True
+        if 'uploaded_file_key' not in session:
+            abort(400, description="Image not found in session")
+
+        image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{session['uploaded_file_key']}"
+
+        session['image_viewed'] = True
+        return render_template('post.html', image_url=image_url)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        abort(500, description="Internal server error")
+        
+
+@app.route('/post_data', methods=['POST'])
+def post_data():
+    posts_collection = database['posts']
+    try:
+        username = session.get('username')
+        user_id = session.get('user_id')
+        post_description = request.form.get('post_description')
+        image_url = session.get('uploaded_file_key', None)
+        if image_url:
+            image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{image_url}"
+        post = {
+            "user_id": user_id, 
+            "username": username,
+            "likes": 0,
+            "post_description": post_description,
+            "image_url": image_url,
+            "created_at": datetime.datetime.utcnow()  
+        }
+
+        posts_collection.insert_one(post)
+        return redirect(url_for('home'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to submit post", 500
+
+
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('error.html', message=e.description), 400
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html', message=e.description), 500
+
+@app.route('/delete_image', methods=['POST'])
+def delete_image():
+    s3.delete_object(Bucket=os.getenv('BUCKET_NAME'), Key=session['uploaded_file_key'])
+    del session['uploaded_file_key']  
+    session['image_on_post_page'] = False
+    return redirect(url_for('create')) 
 
 # Gallery Page: Users can see their saved artworks
 @app.route('/gallery')
@@ -153,6 +246,7 @@ def login_auth():
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
+            session['username'] = username
 
             errors = []
             
