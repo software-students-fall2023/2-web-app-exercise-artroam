@@ -1,7 +1,20 @@
-{% extends "base.html %}
+{% extends "base.html" %}
 
-{% block content %}
-    <div class="content">
-        Create
-    </div>    
+{% block container %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/capture.css') }}">
+    <script src="{{ url_for('static', filename='capture.js') }}"></script>
+    <div id="options">
+        <button id="take-photo-button">Take Photo</button>
+        <button id="upload-photo-button">Upload Photo</button>
+        <input type="file" id="file-input" accept="image/*" style="display: none;">
+    </div>
+    <div id="camera-container" style="display: none;">
+        <video id="camera-feed" autoplay playsinline></video>
+        <canvas id="captured-photo" style="display: none;" width="640" height="480"></canvas>
+    </div>
+    <div id="buttons" style="display: none;">
+        <button id="capture-button">Capture</button>
+        <button id="retake-button" style="display: none;">Retake</button>
+        <button id="next-button" style="display: none;">Next</button>
+    </div>
 {% endblock %}

@@ -1,9 +1,11 @@
-{% extends "base.html %}
+{% extends 'base.html' %}
 
-{% block content %}
+{% block container %}
         <div class="content">
-            profile
-            <br> </br>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </div>   
+            <h1>Profile:</h1>
+            <p>Welcome, {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+        
+        <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

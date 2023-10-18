@@ -8,8 +8,15 @@ Artroam is a web application that empowers artists by providing a platform that 
 
 ## User stories
 
-See instructions. Delete this line and place a link to the user stories here.
+1. As an artroam user, I want to be able to login into the app and sign up to create an account.
+2. As an artroam user, I want to be able to see all the artworks available with their descriptions and authors.
+3. As an artroam user, I want to be able to set my profile picture on my profile page. 
+4. As an artroam user, I want to be able to login into the app and have / maintain a profile.
+5. As an artoroam user, I want to be able to capture or upload a photo and post it with a comment.
 
 ## Task boards
 
-See instructions. Delete this line and place a link to the task boards here.
+[Sprint 1](https://github.com/orgs/software-students-fall2023/projects/3)
+[Sprint 2](https://github.com/orgs/software-students-fall2023/projects/31)
+
+## Webapp Setup
