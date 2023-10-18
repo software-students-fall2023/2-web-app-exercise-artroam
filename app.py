@@ -36,8 +36,7 @@ database = client[os.getenv('MONGO_DBNAME')]
 
 # Checks if the connection has been made, else make an error printout
 try:
-    database.admin.command('ping')                
-    database = database[os.getenv('MONGO_DBNAME')]      
+    client.admin.command('ping')                 
     print('* Connected to MongoDB!')         
 
 except Exception as err:
