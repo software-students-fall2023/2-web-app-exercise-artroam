@@ -1,8 +1,10 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block content%}
-    <span class="search-container">
-        <form action="/action_page.php">
+{% block container %}
+    <div class="content">Home/Explore</div>
+
+    <span class="search_container">
+        <form action="">
             <input type="text" placeholder="Search.." name="search">
             <button type="submit">Submit</button>
         </form>
@@ -16,45 +18,38 @@
             <a href="">Photography</a>
             <a href="">Visual Arts</a>
         </div>
-    </span>
+    </span> 
 
     <section>
-        {% if artworks%}
+        {% if artworks %}
             {% for artwork in artworks %}
-            <div class="postContainer">
-                <div class="topContainer">
-                    <div class="artistContainer">
-                        <!-- {{artwork.profile_picture}} -->
-                        <img src="{{url_for('static'), filename='images/avatar.png'}}" alt="avatar">
+                <div class="postContiner">
+                    <div class="profileContainer">
+                        <div class="artistContainer">
+                            <!-- {{artwork.profile_picture}} -->
+                            <img src="{{url_for('static', filename='images/avatar.png')}}">
+                            <span>{{artwork.username}}</span>
+                        </div>
 
-                        <!-- <span>{{artwork.username}}</span> -->
-                        <span>John Smith</span>
-
+                        <div class="likesContainer">
+                            <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                            <span>{{artwork.likes}}</span>
+                        </div>
                     </div>
 
-                    <div class="statsContainer">
-                        <i class="fa-solid fa-star icon" style="color: #464d58;"></i>
-                        <!-- <span>{{artwork.likes}}</span> -->
-                        <span>16.1k</span>
+                    <div class="artContainer">
+                        <!-- {{artwork.image}} -->
+                        <img src="{{url_for('static', filename='images/22-06-05-1.jpeg')}}">
+                    </div>
+
+                    <div class="detailsContainer">
+                        <div>{{artwork.description}}</div>
                     </div>
                 </div>
-
-                <div class="previewContainer">
-                    <!-- {{artwork.image}} -->
-                    <img src="{{url_for('static'), filename='images/22-06-05-1.jpeg'}}" alt="artwork">
-                </div>
-
-                <div class="detailsContainer">
-                    <div class="descriptionText">
-                        <!-- {{artwork.description}} -->
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </div>
-                </div>
-            </div>
-            {%endfor%}
+            {% endfor %}
 
         {% else %}
-        <p>Currently no artworks in the database</p>
+        <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks in the database</p>
+        {% endif %}
     </section>
 {% endblock %}
-

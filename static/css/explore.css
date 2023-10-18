@@ -44,7 +44,7 @@
     background-color: hsl(0, 0%, 44%);
 }
   
-.search-container input[type=text] {
+.search_container input[type=text] {
 padding: 6px;
 margin-top: 8px;
 font-size: 17px;
@@ -52,7 +52,7 @@ border: none;
 float: left;
 }
   
-.search-container button {
+.search_container button {
 float: left;
 padding: 6px;
 margin-top: 8px;
@@ -63,27 +63,13 @@ border: none;
 cursor: pointer;
 }
 
-
-.gridItem {
+/* Creates some space between each post */
+.postContainer {
     margin-bottom: 40px;
 }
 
-.statsContainer {
-    height: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.artistContainer,
-.iconContainer,
-.iconStats {
-    display: flex;
-    align-items: center;
-}
-
-.artistContainer img {
+/* Creates dimensions for the profile picture image */
+.profileContainer img {
     width: 25px;
     height: 25px;
     object-fit: cover;
@@ -91,20 +77,22 @@ cursor: pointer;
     margin-right: 5px;
 }
 
-.artistContainer span {
+/* Properties for the username */
+.profileContainer span {
    font-weight: 700;
 }
 
-.iconContainer {
-    width: 120px;
+/* Properties for the likes */
+.likesContainer {
+    height: 30px;
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
 }
 
-.iconStats .icon {
-    margin-right: 4px;
-}
-
-.previewContainer img {
+/*  Properteis for the image */
+.artContainer img {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -115,6 +103,7 @@ cursor: pointer;
     border-radius: 4px;
 }
 
+/*  */
 .detailsContainer {
     margin: 10px 0;
 }

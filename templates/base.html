@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='explore.css')}}">
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='style.css')}}">
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='explore.css')}}">
+        <title>ArtRoam</title>
     </head>
 
     <body>
         <header>
             <div class="logo">ArtRoam</div>
-        </header>
-        
+        </header>        
+
         <main>
-            {% block content %}
-            {% endblock %}
+            {% block container %} {% endblock %}
         </main>
-        
+
         <nav>
-            <a href="/">Explore</a>
-            <a href="/create">Create</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/profile">Profile</a>
-        </nav>    
+            <a href="{{url_for('home')}}">Explore</a>
+            <a href="{{url_for('create')}}">Create</a>
+            <a href="{{url_for('gallery')}}">Gallery</a>
+            <a href="{{url_for('profile')}}">Profile</a>
+        </nav>
     </body>
 </html>
