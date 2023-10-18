@@ -1,6 +1,0 @@
-MONGO_DBNAME=artroam
-MONGO_URI="mongodb+srv://artroam_user:artroam123@artroam-cluster.fezhsez.mongodb.net/?retryWrites=true&w=majority"
-FLASK_APP=app.py
-FLASK_ENV=development
-GITHUB_SECRET=your_github_secret
-GITHUB_REPO=https://github.com/software-students-fall2023/2-web-app-exercise-artroam

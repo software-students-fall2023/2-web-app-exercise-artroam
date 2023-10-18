@@ -5,7 +5,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="{{ url_for('static', filename='css/style.css') }}"
     />
     <link
       rel="stylesheet"
@@ -25,7 +25,125 @@
     </header>
     <main>
       <div class="content">
-        <form method="POST" enctype="multipart/form-data" action="/gallery">
+        <div class="gridItem">
+          <div class="statsContainer">
+            <div class="artistContainer">
+              <img
+                src="{{ url_for('static', filename='avatar.png') }}"
+                alt="avatar"
+              />
+              <span>John Smith</span>
+            </div>
+
+            <div class="iconContainer">
+              <div class="iconStats">
+                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                <span>747</span>
+              </div>
+
+              <div class="iconStats">
+                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
+                <span>16.1k</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="previewContainer">
+            <img
+              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
+              alt="artwork"
+            />
+          </div>
+
+          <div class="detailsContainer">
+            <div class="descriptionText">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </div>
+          </div>
+        </div>
+
+        <div class="gridItem">
+          <div class="statsContainer">
+            <div class="artistContainer">
+              <img
+                src="{{ url_for('static', filename='avatar.png') }}"
+                alt="avatar"
+              />
+              <span>John Smith</span>
+            </div>
+
+            <div class="iconContainer">
+              <div class="iconStats">
+                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                <span>747</span>
+              </div>
+
+              <div class="iconStats">
+                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
+                <span>16.1k</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="previewContainer">
+            <img
+              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
+              alt="artwork"
+            />
+          </div>
+
+          <div class="detailsContainer">
+            <div class="descriptionText">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </div>
+          </div>
+        </div>
+
+        <div class="gridItem">
+          <div class="statsContainer">
+            <div class="artistContainer">
+              <img
+                src="{{ url_for('static', filename='avatar.png') }}"
+                alt="avatar"
+              />
+              <span>John Smith</span>
+            </div>
+
+            <div class="iconContainer">
+              <div class="iconStats">
+                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                <span>747</span>
+              </div>
+
+              <div class="iconStats">
+                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
+                <span>16.1k</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="previewContainer">
+            <img
+              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
+              alt="artwork"
+            />
+          </div>
+
+          <div class="detailsContainer">
+            <div class="descriptionText">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </div>
+          </div>
+        </div>
+
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          action="/gallery/save"
+        >
           <div>
             <label for="image_uploads"
               >Choose images to upload (PNG, JPG, JPEG)</label
@@ -34,7 +152,7 @@
               type="file"
               id="image_uploads"
               name="image_uploads"
-              accept=".jpg, .jpeg, .png"
+              accept="image/*"
               multiple
             />
           </div>
@@ -45,120 +163,6 @@
             <button type="submit">Submit</button>
           </div>
         </form>
-
-        <div class="gridItem">
-          <div class="statsContainer">
-            <div class="artistContainer">
-              <img
-                src="{{ url_for('static', filename='avatar.png') }}"
-                alt="avatar"
-              />
-              <span>John Smith</span>
-            </div>
-
-            <div class="iconContainer">
-              <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
-                <span>747</span>
-              </div>
-
-              <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
-                <span>16.1k</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="previewContainer">
-            <img
-              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
-              alt="artwork"
-            />
-          </div>
-
-          <div class="detailsContainer">
-            <div class="descriptionText">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-        </div>
-
-        <div class="gridItem">
-          <div class="statsContainer">
-            <div class="artistContainer">
-              <img
-                src="{{ url_for('static', filename='avatar.png') }}"
-                alt="avatar"
-              />
-              <span>John Smith</span>
-            </div>
-
-            <div class="iconContainer">
-              <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
-                <span>747</span>
-              </div>
-
-              <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
-                <span>16.1k</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="previewContainer">
-            <img
-              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
-              alt="artwork"
-            />
-          </div>
-
-          <div class="detailsContainer">
-            <div class="descriptionText">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-        </div>
-
-        <div class="gridItem">
-          <div class="statsContainer">
-            <div class="artistContainer">
-              <img
-                src="{{ url_for('static', filename='avatar.png') }}"
-                alt="avatar"
-              />
-              <span>John Smith</span>
-            </div>
-
-            <div class="iconContainer">
-              <div class="iconStats">
-                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
-                <span>747</span>
-              </div>
-
-              <div class="iconStats">
-                <i class="fa-solid fa-eye icon" style="color: #464d58"></i>
-                <span>16.1k</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="previewContainer">
-            <img
-              src="{{ url_for('static', filename='22-06-05-1.jpeg') }}"
-              alt="artwork"
-            />
-          </div>
-
-          <div class="detailsContainer">
-            <div class="descriptionText">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </div>
-          </div>
-        </div>
       </div>
     </main>
     <nav>

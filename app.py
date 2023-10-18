@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
+from utils.helpers import upload_file_to_s3
 import os
 
 app = Flask(__name__)
+app.secret_key = 'some secret'
 load_dotenv()
 
 # Create a new client and connect to the server
@@ -34,15 +36,45 @@ def index():
 def create():
     return render_template('create.html')
 
-@app.route('/gallery', methods = ['GET','POST'])
+@app.route('/gallery', methods = ['GET'])
 def gallery():
-    if request.method == 'POST':
-        images = request.form['image_uploads']
-        response = make_response(images, 200)
-        response.mimetype = "text/plain"
-        return response
+    return render_template('gallery.html')
+
+@app.route('/gallery/save', methods = ['POST'])
+def gallery_save():
+    # check whether an input field with name 'image_uploads' exist
+    if 'image_uploads' not in request.files:
+        flash('No image_uploads key in request.files')
+        return redirect(url_for('gallery'))
+
+    # after confirm 'image_uploads' exist, get the file from input
+    file = request.files['image_uploads']
+
+    # check whether a file is selected
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(url_for('gallery'))
+
+    # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
+    if file:
+        output = upload_file_to_s3(file) 
+        
+        # if upload success,will return file name of uploaded file
+        if output: 
+            # TODO: save the file name in database
+
+            flash("Success upload: {}".format(output))
+            return redirect(url_for('gallery'))
+
+        # upload failed, redirect to upload page
+        else:
+            flash("Unable to upload, try again")
+            return redirect(url_for('gallery'))
+        
+    # if file extension not allowed
     else:
-        return render_template('gallery.html')
+        flash("File type not accepted,please try again.")
+        return redirect(url_for('gallery'))
 
 @app.route('/profile')
 def profile():
