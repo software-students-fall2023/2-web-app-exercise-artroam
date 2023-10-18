@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#buttons, #options {
+    text-align: center;
+    padding: 1em;
+}
+
+.image-container {
+    max-width: 580px;  
+    margin: 0 auto;
+    text-align: center; 
+    display: flex;     
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: #f9f9f9;  
+}
+
+.image-container img {
+    max-width: 100%;  
+    max-height: 100%;  
+    object-fit: contain; 
+}
+
+.comment-box {
+    padding: 10px;
+    max-width: 600px;  
+    margin: 0 auto;  
+}
+
+#comment {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    resize: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#back-btn {
+    margin-left:20px; 
+    margin-top:20px; 
+    border: none;
+    color: #D47500;             
+    cursor: pointer;      
+    display: block;
+}
+
+.image-type-dropdown {
+    margin: 20px auto; 
+    width: 90%; 
+    max-width: 580px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-type-dropdown label {
+    font-size: 16px;  
+    margin-bottom: 8px; 
+    color: #333; 
+}
+
+.image-type-dropdown select {
+    width: 100%; 
+    padding: 10px;  
+    border-radius: 8px;  
+    border: 1px solid #e6e6e6;  
+    background-color: white; 
+    font-size: 16px; 
+    color: #333;  
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: none;  
+    cursor: pointer; 
+}
+
+.image-type-dropdown select:focus {
+    outline: none; 
+    border-color: #FFA500;  
+    box-shadow: 0 0 5px rgba(255, 165, 0, 0.3);  
+}
+
+.image-type-dropdown select::-ms-expand {
+    display: none;  
+}
+
+.image-type-dropdown:after {
+    content: '\25BC';
+    position: absolute;
+    top: 60%; 
+    right: 8%;  
+    pointer-events: none;  
+    font-size: 12px; 
+    color: #e6e6e6;  
+}
+
+@media screen and (max-width: 768px) {
+
+    #buttons {
+        bottom: 5px;
+        left: 0; 
+        text-align: center;
+        padding: 1em;
+    }
+
+    .comment-box {
+        padding: 5px;
+    }
+
+    #comment {
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .image-container {
+        text-align: center; 
+    }
+
+    .image-container img {
+        max-width: 100%; 
+        height: auto; 
+    }
+    .image-type-dropdown select {
+        font-size: 14px;
+    }
+    #back-btn {
+        margin-left:0px; 
+        margin-top:0px; 
+        border: none;
+        color: #D47500;             
+        cursor: pointer;      
+        display: block;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .image-container img {
+        max-width: 600px;  
+        max-height: 400px; 
+        display: block;
+        margin: 0 auto;  
+    }
+}
