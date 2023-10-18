@@ -1,26 +1,34 @@
-{% extends, "base.html %}
+{% extends 'base.html' %}
 
-{% block content %}
-        <div class="content">
-            <h1> Login </h1>
-            <form method="POST" action="/login_auth">
-                <label for="username">Username: </label>
-                <input type="text" name="username" id="username" required><br>
-                <label for="password">Password: </label>
-                <input type="password" name="password" id="password" required><br>
-                <button type="submit" name="submit" value="Log in">Submit</button>
-            </form>
-            <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+{% block container %}
+    <div class="content">
+        <h1> Login </h1>
+
+        <!-- When they are on the login.html page, it will show this form but when they press submit, it will actuate the login_auth() function from the backend.  -->
+        <form method="POST" action="{{url_for('login_auth')}}">
+            <label for="username">Username: </label>
+            <input type="text" name="username" id="username" required><br>
+
+            <label for="password">Password: </label>
+            <input type="password" name="password" id="password" required><br>
+
+            <button type="submit" name="submit" value="Login">Submit</button>
+        </form>
+
+        <!-- If they users don't have an account, it simply allows them to click and call the signup() function which renders the signup.html file. -->
+        <p>Don't have an account? <a href="{{url_for('signup')}}">Sign Up</a></p>
+    </div>
+
+    <!-- If there are any errors it makes sure -->
+    {% if errors %}
+        <div class="alert">
+            <ul>
+                {% for message in errors %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
         </div>
-        {% if errors %}
-            <div class="alert">
-                <ul>
-                    {% for message in errors %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}   
+    {% endif %}   
 {% endblock %}
 
 <!-- add a hyperlink to the forgot password page and figure out what sort of validation is needed. -->
