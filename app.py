@@ -1,9 +1,9 @@
-from flask import Flask, url_for, redirect, render_template, make_response, session, request,  jsonify, abort, flash
+from flask import Flask, url_for, redirect, render_template, make_response, session, request,  jsonify, abort
 from flask_session import Session
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from utils.helpers import upload_file_to_s3
+# from utils.helpers import upload_file_to_s3
 import os
 from bson.objectid import ObjectId   
 import boto3
@@ -37,7 +37,7 @@ database = client[os.getenv('MONGO_DBNAME')]
 
 # Checks if the connection has been made, else make an error printout
 try:
-    database.admin.command('ping')                
+    client.admin.command('ping')                
     database = database[os.getenv('MONGO_DBNAME')]      
     print('* Connected to MongoDB!')         
 
@@ -86,41 +86,41 @@ def create():
 def gallery():
     return render_template('gallery.html')
 
-@app.route('/gallery/save', methods = ['POST'])
-def gallery_save():
-    # check whether an input field with name 'image_uploads' exist
-    if 'image_uploads' not in request.files:
-        flash('No image_uploads key in request.files')
-        return redirect(url_for('gallery'))
+# @app.route('/gallery/save', methods = ['POST'])
+# def gallery_save():
+#     # check whether an input field with name 'image_uploads' exist
+#     if 'image_uploads' not in request.files:
+#         flash('No image_uploads key in request.files')
+#         return redirect(url_for('gallery'))
 
-    # after confirm 'image_uploads' exist, get the file from input
-    file = request.files['image_uploads']
+#     # after confirm 'image_uploads' exist, get the file from input
+#     file = request.files['image_uploads']
 
-    # check whether a file is selected
-    if file.filename == '':
-        flash('No selected file')
-        return redirect(url_for('gallery'))
+#     # check whether a file is selected
+#     if file.filename == '':
+#         flash('No selected file')
+#         return redirect(url_for('gallery'))
 
-    # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
-    if file:
-        output = upload_file_to_s3(file) 
+#     # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
+#     if file:
+#         output = upload_file_to_s3(file) 
         
-        # if upload success,will return file name of uploaded file
-        if output: 
-            # TODO: save the file name in database
+#         # if upload success,will return file name of uploaded file
+#         if output: 
+#             # TODO: save the file name in database
 
-            flash("Success upload: {}".format(output))
-            return redirect(url_for('gallery'))
+#             flash("Success upload: {}".format(output))
+#             return redirect(url_for('gallery'))
 
-        # upload failed, redirect to upload page
-        else:
-            flash("Unable to upload, try again")
-            return redirect(url_for('gallery'))
+#         # upload failed, redirect to upload page
+#         else:
+#             flash("Unable to upload, try again")
+#             return redirect(url_for('gallery'))
         
-    # if file extension not allowed
-    else:
-        flash("File type not accepted,please try again.")
-        return redirect(url_for('gallery'))
+#     # if file extension not allowed
+#     else:
+#         flash("File type not accepted,please try again.")
+#         return redirect(url_for('gallery'))
 
 # Route to make a post
 @app.route('/post', methods=['POST', 'GET'])
