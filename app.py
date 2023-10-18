@@ -58,6 +58,7 @@ def home():
     artworks = database.posts.find({}).sort("created_at", -1)
     return render_template('index.html', artworks = artworks)
 
+ # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
     session['image_on_post_page'] = False
@@ -80,7 +81,7 @@ def create():
 
     return render_template('create.html')
 
-
+# Route to make a post
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     try:
@@ -97,7 +98,7 @@ def post():
         print(f"An error occurred: {e}")
         abort(500, description="Internal server error")
         
-
+# Route to upload posts
 @app.route('/post_data', methods=['POST'])
 def post_data():
     posts_collection = database['posts']
@@ -124,7 +125,6 @@ def post_data():
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
 
-
 @app.errorhandler(400)
 def bad_request(e):
     return render_template('error.html', message=e.description), 400
@@ -133,6 +133,7 @@ def bad_request(e):
 def internal_server_error(e):
     return render_template('error.html', message=e.description), 500
 
+# Route to delete image
 @app.route('/delete_image', methods=['POST'])
 def delete_image():
     s3.delete_object(Bucket=os.getenv('BUCKET_NAME'), Key=session['uploaded_file_key'])
