@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const capturedPhoto = document.getElementById('captured-photo');
     const fileInput = document.getElementById('file-input');
     const canvas = capturedPhoto.getContext('2d');
+    const backButton = document.getElementById('back-button');
+
     
     let isCaptured = false;
     const video = document.getElementById('camera-feed');
@@ -40,6 +42,7 @@ function takePhoto() {
 takePhotoButton.addEventListener('click', () => {
     takePhoto();
     showCamera();
+    document.getElementById("back-button").style.display = "block";
 });
 
 captureButton.addEventListener('click', () => {
@@ -96,10 +99,6 @@ nextButton.addEventListener('click', () => {
         const imageBase64 = capturedPhoto.toDataURL('image/jpeg');
         sendImageToServer(imageBase64);
     }
-});
-
-uploadPhotoButton.addEventListener('click', () => {
-    fileInput.click();
 });
 
 fileInput.addEventListener('change', (event) => {

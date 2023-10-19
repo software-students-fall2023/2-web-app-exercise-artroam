@@ -105,7 +105,9 @@ def post_data():
         username = session.get('username')
         user_id = session.get('user_id')
         post_description = request.form.get('post_description')
+        image_type = request.form.get('image_type')
         image_url = session.get('uploaded_file_key', None)
+        
         if image_url:
             image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{image_url}"
         post = {
@@ -114,6 +116,7 @@ def post_data():
             "likes": 0,
             "post_description": post_description,
             "image_url": image_url,
+            "art_type": image_type,
             "created_at": datetime.datetime.utcnow()  
         }
 

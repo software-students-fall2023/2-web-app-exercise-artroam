@@ -4,7 +4,7 @@
     padding: 0 1em; 
 }
 
-#camera-feed, #captured-photo, #image-container{
+#camera-feed, #captured-photo {
     max-width: 100%;
     width: 100%;
     height: auto;
@@ -24,24 +24,49 @@
     display: none;
 }
 
-.comment-box {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
+.option-card {
+    width: 90%;
+    height: 40vh;
+    margin: 5% auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7; 
+    transition: transform 0.2s;
+    font-size: 50px; 
 }
 
-#comment {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
+.option-card:active {
+    transform: scale(0.98);
 }
 
-.image-container img {
-    max-width: 100%; 
-    height: auto; 
+.option-card i.material-icons {
+    color: #333; 
 }
+
+#back-button {
+    position: fixed;
+    top: 10px;  
+    left: 10px; 
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%; 
+    padding: 10px;
+    z-index: 1000;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+#back-button i.material-icons {
+    color: #FFA500;  
+    font-size: 24px; 
+}
+
+
 
 @media screen and (max-width: 768px) {
 
@@ -51,29 +76,19 @@
         text-align: center;
         padding: 1em;
     }
-
-    .comment-box {
-        padding: 5px;
-    }
-
-    #comment {
-        padding: 5px;
-        font-size: 14px;
-    }
-
-    .image-container {
-        text-align: center; 
-    }
-
-    .image-container img {
-        max-width: 100%; 
-        height: auto; 
-    }
 }
 
 @media (min-width: 769px) {
     #camera-container {
         max-width: 640px;
         margin: 0 auto;
+        margin-top: 15px;
+    }
+
+    .option-card {
+        width: 35%;         
+        height: 32vh;       
+        font-size: 30px;    
+        margin: 3% auto;    
     }
 }
