@@ -70,6 +70,7 @@
 .filter_menu .filter_contents {
     display: block;
     opacity: 1;
+    z-index: 1;
 }
 
 .filter_menu a:hover{ 
@@ -82,18 +83,18 @@
     margin-top: 50px;
 }
 
-.profileContainer{
-    height: 50px;   
+.topContainer{
+    height: 50px;  
 }
 
-.profileContainer .artistContainer{
+.topContainer .artistContainer{
     display: flex;
     justify-content: flex-start;
     align-items: center;
     float: left;
 }
 
-.profileContainer img {
+.topContainer img {
     width: 35px;
     height: 35px;
     object-fit: cover;
@@ -101,26 +102,25 @@
     margin-right: 5px;
 }
 
-.profileContainer span {
+.topContainer span {
    font-weight: 700;
    margin-left: 5px;
 }
 
 /* Properties for the likes */
-.viewerContainer {
+.statsContainer {
     width: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px 0;
     float: right;
 }
 
-.viewerButton{
+.statsButton{
     padding: 5px;
 }
 
-.viewerButton i{
+.statsButton i{
     font-size: 17px;
 }
 

@@ -49,15 +49,15 @@
     {% if artworks %}
         {% for artwork in artworks %}
         <div class="postContainer">
-            <div class="profileContainer">
+            <div class="topContainer">
                 <div class="artistContainer">
                     <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
                     <span>{{artwork.username}}</span>
                 </div>
 
-                <div class="viewerContainer">
-                    <button href="" class="viewerButton"><i class="material-icons">bookmark</i></button>
-                    <button href="" class="viewerButton"><i class="material-icons">thumb_up</i></button>
+                <div class="statsContainer">
+                    <button href="" class="statsButton"><i class="material-icons">bookmark</i></button>
+                    <button href="" class="statsButton"><i class="material-icons">thumb_up</i></button>
                     <span>{{artwork.likes}}</span>
                 </div>
             </div>
