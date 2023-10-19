@@ -1,6 +1,44 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block container %}
-    <div class="content">Gallery</div>    
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda itaque id quo perspiciatis nesciunt numquam fuga et, dolorem voluptates cumque laborum nulla pariatur unde sint reprehenderit rerum odit mollitia tempora?</p>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/gallery.css') }}"/>
+  {% block javascript %}
+    <script src="https://kit.fontawesome.com/82b68d50e9.js" crossorigin="anonymous"></script>
+  {% endblock %}
+
+  {% if favorites and favorites|length > 0 %}
+    {% for favorite in favorites %}
+      {% set user = get_user_by_id(favorite.user_id) %}
+      <div class="gridItem">
+        <div class="statsContainer">
+          <div class="artistContainer">
+            <img src="{{ user.avatar_url if user.avatar_url else url_for('static', filename='images/avatar.png') }}" alt="avatar"/>
+            <span>{{favorite.username}}</span>
+          </div>
+    
+          <div class="iconContainer">
+            <div class="iconStats">
+              <button><i class="fa-solid fa-bookmark icon"></i></button>
+              <span>{{favorite.likes}}</span>
+            </div>
+          </div>
+        </div>
+    
+        <div class="previewContainer">
+          <img src="{{ favorite.image_url if favorite.image_url else url_for('static', filename='images/22-06-05-1.jpeg') }}" alt="artwork"/>
+        </div>
+    
+        <div class="detailsContainer">
+          <div class="descriptionText">{{favorite.post_description}}</div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="endOfList">Currently you have no saved artworks</p>
+  {% endif %}
+
+  {% block uploadJs%}
+    <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+  {% endblock %}
 {% endblock %}
