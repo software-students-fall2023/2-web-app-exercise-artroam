@@ -20,3 +20,6 @@ Artroam is a web application that empowers artists by providing a platform that 
 [Sprint 2](https://github.com/orgs/software-students-fall2023/projects/31)
 
 ## Webapp Setup
+1. Go to [AWS website](https://aws.amazon.com/cli/) and download AWS Command Line Interface based on your operating system.
+2. pip install -r requirements.txt
+3. flask run

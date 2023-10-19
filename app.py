@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 import boto3
 import uuid
 import datetime
-from utils import get_user_by_id
+from utils import get_user_by_id, get_favorites_by_ids
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -85,13 +85,11 @@ def create():
 # Route to gallery
 @app.route('/gallery', methods = ['GET'])
 def gallery():
-    users = database['users']
-    posts = database['posts']
     try:
         user_id = session.get('user_id')
         if user_id:
-            currentUser = users.find_one({"_id": ObjectId(user_id)})
-            favorites = list(posts.find({"_id": {"$in": currentUser['favorites']}}))
+            current_user = get_user_by_id(user_id)
+            favorites = list(get_favorites_by_ids(current_user.get('favorites')))
             return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
         else:
             return redirect(url_for('login'))
@@ -99,6 +97,12 @@ def gallery():
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
+
+# Handle unlike put request
+@app.put('/<string:post_id>/unlike')
+def unlike_post(post_id):
+    print(post_id)
+    return f'Post {post_id}'
 
 # Route to make a post
 @app.route('/post', methods=['POST', 'GET'])
