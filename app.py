@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 import boto3
 import uuid
 import datetime
+from utils import get_user_by_id
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -58,7 +59,7 @@ def home():
     artworks = database.posts.find({}).sort("created_at", -1)
     return render_template('index.html', artworks = artworks)
 
- # Route to upload a photo or take a photo 
+# Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
     session['image_on_post_page'] = False
@@ -81,45 +82,23 @@ def create():
 
     return render_template('create.html')
 
+# Route to gallery
 @app.route('/gallery', methods = ['GET'])
 def gallery():
-    return render_template('gallery.html')
-
-# @app.route('/gallery/save', methods = ['POST'])
-# def gallery_save():
-#     # check whether an input field with name 'image_uploads' exist
-#     if 'image_uploads' not in request.files:
-#         flash('No image_uploads key in request.files')
-#         return redirect(url_for('gallery'))
-
-#     # after confirm 'image_uploads' exist, get the file from input
-#     file = request.files['image_uploads']
-
-#     # check whether a file is selected
-#     if file.filename == '':
-#         flash('No selected file')
-#         return redirect(url_for('gallery'))
-
-#     # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
-#     if file:
-#         output = upload_file_to_s3(file) 
-        
-#         # if upload success,will return file name of uploaded file
-#         if output: 
-#             # TODO: save the file name in database
-
-#             flash("Success upload: {}".format(output))
-#             return redirect(url_for('gallery'))
-
-#         # upload failed, redirect to upload page
-#         else:
-#             flash("Unable to upload, try again")
-#             return redirect(url_for('gallery'))
-        
-#     # if file extension not allowed
-#     else:
-#         flash("File type not accepted,please try again.")
-#         return redirect(url_for('gallery'))
+    users = database['users']
+    posts = database['posts']
+    try:
+        user_id = session.get('user_id')
+        if user_id:
+            currentUser = users.find_one({"_id": ObjectId(user_id)})
+            favorites = list(posts.find({"_id": {"$in": currentUser['favorites']}}))
+            return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
+        else:
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to submit post", 500
 
 # Route to make a post
 @app.route('/post', methods=['POST', 'GET'])
