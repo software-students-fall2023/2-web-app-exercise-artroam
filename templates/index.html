@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 {% block container %}
-<div class="content">Home/Explore</div>
 
+<h1></h1>
+<!-- This is a container for the search bar -->
+<!-- For now it has no action but when you search something up, there would be a route to find specific posts in the mongodb atlas database (based on usernames and titles) -->
 <span class="search_container">
     <form action="">
-        <input type="text" placeholder="Search.." name="search">
+        <input type="text" placeholder="Search..." name="search">
         <button type="submit">Submit</button>
     </form>
 </span>
 
+<!-- This is the container for the dropdown menu -->
+<!-- For now it has no action but when you click one of the filters, there would be a route to find specific tags related with certain posts -->
 <span class="filter_menu">
     <button>Filter</button>
     <div class="filter_contents">
@@ -18,33 +22,37 @@
         <a href="">Visual Arts</a>
     </div>
 </span>
+
+<!-- Main section which shows all the posts in the database-->
 <section>
     {% if artworks %}
-    {% for artwork in artworks %}
-    <div class="postContiner">
-        <div class="profileContainer">
-            <div class="artistContainer">
-                <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
-                <span>{{artwork.username}}</span>
+        {% for artwork in artworks %}
+        <div class="postContiner">
+            <div class="profileContainer">
+                <div class="artistContainer">
+                    <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
+                    <span>{{artwork.username}}</span>
+                </div>
+
+                <div class="likesContainer">
+                    <i class="fa-solid fa-star icon" style="color: #464d58"></i>
+                    <span>{{artwork.likes}}</span>
+                </div>
             </div>
 
-            <div class="likesContainer">
-                <i class="fa-solid fa-star icon" style="color: #464d58"></i>
-                <span>{{artwork.likes}}</span>
+            <div class="artContainer">
+                <img src="{{artwork.image_url}}">
+            </div>
+
+            <div class="detailsContainer">
+                <div>{{artwork.post_description}}</div>
             </div>
         </div>
+        {% endfor %}
 
-        <div class="artContainer">
-            <img src="{{artwork.image_url}}">
-        </div>
-
-        <div class="detailsContainer">
-            <div>{{artwork.post_description}}</div>
-        </div>
-    </div>
-    {% endfor %}
+    <!-- If there are no images in the database or images under a specific tag, then it will display this -->
     {% else %}
-    <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks in the database</p>
+        <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks posted!</p>
     {% endif %}
 </section>
 {% endblock %}
