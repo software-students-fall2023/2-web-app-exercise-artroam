@@ -1,18 +1,39 @@
-/* Apply some basic design and positioning for the filter drop down menu */
-.filter_menu button{
-    background-color: darkblue;
-    color:white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer; 
+.search_container {
     display: inline-block;
-    position: fixed;
-    right: 10px; 
+    align-items: center;
 }
 
-/* When you hover over the filter button the colour changes. */
-.filter_menu:hover button{
-    background-color: lightblue;
+.search_container input[type=text] {
+    padding: 6px;
+    font-size: 17px;
+    border: none;
+    border-radius: 5px;
+}
+
+.search_container button {
+    padding: 6px;
+    border: none;
+    cursor: pointer;
+    margin-left: 0px;
+}
+
+.search_container button i {
+    font-size: 17px;
+}
+
+/* Adjusts the position of the filter_contents */
+.filter_menu{
+    position: relative;
+    width: 110px;
+    float: right;
+}
+
+.filter_menu button{
+    display: inline-block;
+    padding: 6px 15px;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
 }
 
 /* Apply some structuring properties for the drop down menus */
@@ -20,76 +41,89 @@
     display: block;
     color: black;
     text-decoration: none;
-    padding: 10px 10px;
+    padding: 6px 0;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%; 
+    height: 100%;
+    box-sizing: border-box;
 }
 
-/* Hiding the elements initially and positioning them absolute to the filter menu */
+/* Hide the filter contents by default */
 .filter_menu .filter_contents{
     display: none;
-    position: fixed;
-    right: 10px;
-    top: 90px;
-    background-color: hsl(0, 0%, 95%);
-    min-width: 100px;
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    width: 100px;
+
+    background-color: white;
+    border-radius: 5px;
     box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
+    opacity: 0; 
+    transition: opacity 0.3s;
 }
 
-/* When hovering over the menu, it will show the contents */
-.filter_menu:hover .filter_contents{
+/* Display the filter_contents when the button is clicked */
+.filter_menu .filter_contents {
     display: block;
+    opacity: 1;
 }
 
-/* Whenever you hover your cursor over any of the menus then it will change the background color of the options */   
 .filter_menu a:hover{ 
     background-color: hsl(0, 0%, 44%);
 }
-  
-.search_container input[type=text] {
-padding: 6px;
-margin-top: 8px;
-font-size: 17px;
-border: none;
-float: left;
-}
-  
-.search_container button {
-float: left;
-padding: 6px;
-margin-top: 8px;
-margin-right: 16px;
-background: #ddd;
-font-size: 17px;
-border: none;
-cursor: pointer;
-}
+
 
 /* Creates some space between each post */
 .postContainer {
-    margin-bottom: 40px;
+    margin-top: 50px;
 }
 
-/* Creates dimensions for the profile picture image */
+.profileContainer{
+    height: 50px;   
+}
+
+.profileContainer .artistContainer{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    float: left;
+}
+
 .profileContainer img {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 5px;
 }
 
-/* Properties for the username */
 .profileContainer span {
    font-weight: 700;
+   margin-left: 5px;
 }
 
 /* Properties for the likes */
-.likesContainer {
-    height: 30px;
+.viewerContainer {
+    width: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 10px 0;
+    float: right;
 }
+
+.viewerButton{
+    padding: 5px;
+}
+
+.viewerButton i{
+    font-size: 17px;
+}
+
 
 /*  Properteis for the image */
 .artContainer img {
@@ -106,4 +140,30 @@ cursor: pointer;
 /*  */
 .detailsContainer {
     margin: 10px 0;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 767px) {
+    .filter_menu {
+        display: block;
+        text-align: center;
+    }
+
+    .filter_menu button, .filter_menu a {
+        display: inline-block;
+        float: none;
+    }
+
+    .filter_menu a {
+        margin: 2px 0;
+        padding: 6px 15px;
+    }
+
+    .filter_menu .filter_contents {
+        position: relative;
+        display: none;
+        top: auto;
+        left: auto;
+        min-width: auto;
+    }
 }
