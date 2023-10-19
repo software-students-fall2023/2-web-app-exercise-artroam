@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 import boto3
 import uuid
 import datetime
+from utils import get_user_by_id
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -147,10 +148,23 @@ def delete_image():
     session['image_on_post_page'] = False
     return redirect(url_for('create')) 
 
-# Gallery Page: Users can see their saved artworks
-@app.route('/gallery')
-def gallery(): 
-    return render_template('gallery.html')
+# Route to gallery
+@app.route('/gallery', methods = ['GET'])
+def gallery():
+    users = database['users']
+    posts = database['posts']
+    try:
+        user_id = session.get('user_id')
+        if user_id:
+            currentUser = users.find_one({"_id": ObjectId(user_id)})
+            favorites = list(posts.find({"_id": {"$in": currentUser['favorites']}}))
+            return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
+        else:
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to submit post", 500
 
 # Users can view their profile
 @app.route('/profile')
