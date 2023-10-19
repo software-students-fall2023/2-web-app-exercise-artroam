@@ -1,70 +1,61 @@
-const input = document.querySelector("input");
-const preview = document.querySelector(".preview");
-
-input.style.opacity = 0;
-
-input.addEventListener("change", updateImageDisplay);
-
-function updateImageDisplay() {
-  while (preview.firstChild) {
-    preview.removeChild(preview.firstChild);
+function findGrid(btnNode) {
+  while (btnNode.classList[0] !== 'gridItem') {
+    btnNode = btnNode.parentNode;
   }
+  return btnNode;
+}
 
-  const curFiles = input.files;
-  if (curFiles.length === 0) {
-    const para = document.createElement("p");
-    para.textContent = "No files currently selected for upload";
-    preview.appendChild(para);
-  } else {
-    const list = document.createElement("ol");
-    preview.appendChild(list);
-
-    for (const file of curFiles) {
-      const listItem = document.createElement("li");
-      const para = document.createElement("p");
-      if (validFileType(file)) {
-        para.textContent = `File name ${file.name}, file size ${returnFileSize(
-          file.size
-        )}.`;
-        const image = document.createElement("img");
-        image.src = URL.createObjectURL(file);
-
-        listItem.appendChild(image);
-        listItem.appendChild(para);
-      } else {
-        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
-        listItem.appendChild(para);
-      }
-
-      list.appendChild(listItem);
-    }
+function handleSuccess(btn) {
+  const grid = findGrid(btn);
+  const main = document.querySelector('main');
+  main.removeChild(grid);
+  if (document.querySelector('main .gridItem') === null) {
+    const endOfList = document.createElement('p');
+    endOfList.className = 'endOfList';
+    endOfList.innerText = 'Currently you have no saved artworks';
+    main.prepend(endOfList);
   }
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
-const fileTypes = [
-  "image/apng",
-  "image/bmp",
-  "image/gif",
-  "image/jpeg",
-  "image/pjpeg",
-  "image/png",
-  "image/svg+xml",
-  "image/tiff",
-  "image/webp",
-  "image/x-icon",
-];
+function handleError(err) {
+  const main = document.querySelector('main');
 
-function validFileType(file) {
-  return fileTypes.includes(file.type);
-}
+  const alert = document.createElement('div');
+  alert.className = 'alertWrapper';
 
-function returnFileSize(number) {
-  if (number < 1024) {
-    return `${number} bytes`;
-  } else if (number >= 1024 && number < 1048576) {
-    return `${(number / 1024).toFixed(1)} KB`;
-  } else if (number >= 1048576) {
-    return `${(number / 1048576).toFixed(1)} MB`;
+  alert.innerHTML = [
+    '<div class="alert alert-danger alert-dismissible" role="alert">',
+    `   <div>An error occured when unsaving artwork: ${err}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('');
+
+  if (!main.firstChild.firstChild) {
+    main.prepend(alert);
   }
 }
+
+function bookmarkBtnOnClick() {
+  const bookmarkBtns = document.querySelectorAll('.bookmarkBtn');
+  bookmarkBtns.forEach((btn) => {
+    const postId = btn.dataset.postId;
+    btn.addEventListener('click', (evt) => {
+      evt.preventDefault();
+
+      $.ajax({
+        url: `/${postId}/unlike`,
+        type: 'PUT',
+        success: (result) => {
+          handleSuccess(btn);
+        },
+        error: (error) => {
+          handleError(error);
+        }
+      });
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', (evt) => {
+  bookmarkBtnOnClick();
+});

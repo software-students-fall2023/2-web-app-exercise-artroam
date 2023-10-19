@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block container %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/capture.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
 
 <!-- When the user clicks on the "Go Back" button, it calls the create() once more -->
 <form action="{{ url_for('create') }}" method="post">
-    <button type="submit">Go Back</button>
+    <button type="submit" id = "back-btn">Go Back</button>
 </form>
 
 <!-- This displays the image of what the user is going to post. If it is there, it will show it, else it will show a placeholder just in case. -->

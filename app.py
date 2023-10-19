@@ -3,12 +3,13 @@ from flask_session import Session
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+# from utils.helpers import upload_file_to_s3
 import os
 from bson.objectid import ObjectId   
 import boto3
 import uuid
 import datetime
-from utils import get_user_by_id
+from utils import get_user_by_id, get_favorites_by_ids
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -86,7 +87,35 @@ def create():
 
     return render_template('create.html')
 
-# Route to make a post - this is when the user decides to upload a photo or takes a photo
+
+# Route to gallery
+@app.route('/gallery', methods = ['GET'])
+def gallery():
+    try:
+        # Gets the user's logged in ID
+        user_id = session.get('user_id')
+
+        # If the user has logged in, then we can do the following
+        if user_id:
+            # We essentially get the current_user's favorite array and passes these details to the gallery.html page. 
+            current_user = get_user_by_id(user_id)
+            favorites = list(get_favorites_by_ids(current_user.get('favorites')))
+            return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
+        #If the user is not logged in, then it redirects to the login page
+        else:
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to submit post", 500
+
+# Handle unlike put request
+@app.put('/<string:post_id>/unlike')
+def unlike_post(post_id):
+    print(post_id)
+    return f'Post {post_id}'
+
+
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     try:
@@ -116,6 +145,7 @@ def post_data():
         username = session.get('username')
         user_id = session.get('user_id')
         post_description = request.form.get('post_description')
+        image_type = request.form.get('image_type')
         image_url = session.get('uploaded_file_key', None)
         
         # If the image_url is valid, we update the image_url to its filename
@@ -131,6 +161,7 @@ def post_data():
             # Create some post tags here as well
             "post_description": post_description,
             "image_url": image_url,
+            "art_type": image_type,
             "created_at": datetime.datetime.utcnow()  
         }
 
@@ -149,31 +180,6 @@ def delete_image():
     del session['uploaded_file_key']  
     session['image_on_post_page'] = False
     return redirect(url_for('create')) 
-
-# Route to gallery
-@app.route('/gallery', methods = ['GET'])
-def gallery():
-    # Gets the both clusters from the databases
-    users = database['users']
-    posts = database['posts']
-
-    try:
-        user_id = session.get('user_id')
-        # If we have a logged in user then we can find the user's ID and generate a list of all their favorite posts
-        if user_id:
-            currentUser = users.find_one({"_id": ObjectId(user_id)})
-            favorites = list(posts.find({"_id": {"$in": currentUser['favorites']}}))
-
-            # Here we render the gallery template and pass the user's ID and their favourites
-            return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
-        
-        # Otherwise, it redirects them to the login page to login.
-        else:
-            return redirect(url_for('login'))
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return "Failed to submit post", 500
 
 # Users can view their profile
 @app.route('/profile')
