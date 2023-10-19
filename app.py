@@ -127,6 +127,8 @@ def post_data():
             "user_id": user_id, 
             "username": username,
             "likes": 0,
+            # Create a post title here. 
+            # Create some post tags here as well
             "post_description": post_description,
             "image_url": image_url,
             "created_at": datetime.datetime.utcnow()  
@@ -244,6 +246,7 @@ def signup():
                 'username': username,
                 'password': password_hash,
                 'email': email
+                # Maybe create a favorites array for them here. 
             })
 
             # Once that's done, it will redirect the user to the login page where they must login to access the webpage. 
