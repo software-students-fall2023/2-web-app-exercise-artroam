@@ -7,5 +7,6 @@ import os
 client = MongoClient(os.getenv('MONGO_URI'))
 database = client[os.getenv('MONGO_DBNAME')]
 
+# Here we get the user's ID as a helper function to pass through to the html page
 def get_user_by_id(user_id):
     return database.users.find_one({'_id': ObjectId(user_id)})

@@ -151,14 +151,21 @@ def delete_image():
 # Route to gallery
 @app.route('/gallery', methods = ['GET'])
 def gallery():
+    # Gets the both clusters from the databases
     users = database['users']
     posts = database['posts']
+
     try:
         user_id = session.get('user_id')
+        # If we have a logged in user then we can find the user's ID and generate a list of all their favorite posts
         if user_id:
             currentUser = users.find_one({"_id": ObjectId(user_id)})
             favorites = list(posts.find({"_id": {"$in": currentUser['favorites']}}))
+
+            # Here we render the gallery template and pass the user's ID and their favourites
             return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
+        
+        # Otherwise, it redirects them to the login page to login.
         else:
             return redirect(url_for('login'))
     
