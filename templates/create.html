@@ -3,12 +3,18 @@
 {% block container %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/capture.css') }}">
     <script src="{{ url_for('static', filename='capture.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <a href="{{ url_for('create') }}" id="back-button" style="display: none;"><i class="material-icons">arrow_back</i></a>
     
     <!-- This displays the take photo and upload buttons which both have an input type of image input -->
     <!-- Outputs when clicked on the buttons are on the capture.js file -->
     <div id="options">
-        <button id="take-photo-button">Take Photo</button>
-        <button id="upload-photo-button">Upload Photo</button>
+        <button class="option-card" id="take-photo-button">
+            <i class="material-icons">camera_alt</i>
+        </button>
+        <label for="file-input" class="option-card" id="upload-photo-button">
+            <i class="material-icons">file_upload</i>
+        </label>
         <input type="file" id="file-input" accept="image/*" style="display: none;">
     </div>
     

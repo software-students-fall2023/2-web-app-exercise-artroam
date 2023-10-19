@@ -19,10 +19,20 @@
 
 <!-- This displays a form where the user can edit post details such as the description. When submitted, this calls the post_data() function. -->
 <form action="{{ url_for('post_data') }}" method="post">
+    <div class="image-type-dropdown">
+        <label for="image-type">Choose image type:</label>
+        <select name="image_type" id="image-type">
+            <option value="digital_art">Digital Art</option>
+            <option value="photography">Photography</option>
+            <option value="visual_art">Visual Art</option>
+        </select>
+    </div>
     <div class="comment-box">
         <textarea name="post_description" id="comment" rows="4" cols="50"></textarea>
     </div>
-    <button type="submit" id="submit-post">Submit</button>
+    <div class="submit-container">
+        <button type="submit" id="submit-post">Post</button>
+    </div>
 </form>
 
 {% endblock %}
