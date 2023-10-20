@@ -49,7 +49,7 @@
 
 .filter_menu ul {
     position: absolute;
-    top: 100%;
+    top: 85%;
     right: 0; 
     width: 100%;
     list-style: none;
@@ -59,13 +59,15 @@
     border-radius: 5px;
     box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease-in-out; 
+    pointer-events: none;
 }
 
-.filter_menu:hover ul {
+.filter_menu button:hover + ul, .filter_menu ul:hover{
     display: block;
     opacity: 1;
     z-index: 1;
+    pointer-events: auto;
 }
 
 .filter_menu a {
@@ -76,7 +78,6 @@
     padding: 6px 5px;
     font-size: 12px;
     border: none;
-    cursor: pointer;
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
@@ -84,6 +85,7 @@
 
 .filter_menu a:hover {
     background-color: #f7d79d;
+    cursor: pointer;
 }
 
 .postContainer {

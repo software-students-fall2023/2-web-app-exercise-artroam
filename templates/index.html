@@ -34,8 +34,20 @@
                 </div>
 
                 <div class="statsContainer">
-                    <button href="" class="statsButton"><i class="material-icons">bookmark</i></button>
-                    <button href="" class="statsButton"><i class="material-icons">thumb_up</i></button>
+                    <button type="submit" name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
+
+                    <!-- Here we get the id of the artwork and send it to the like() function -->
+                    <form action="{{ url_for('like', post_id=artwork._id) }}" method="post" class="like-form">
+                        <button type="submit" name="likeButton" class="statsButton">
+                            <i class="material-icons">
+                                {% if artwork.user_id in session.get('liked_posts', []) %}
+                                    thumb_down
+                                {% else %}
+                                    thumb_up
+                                {% endif %}
+                            </i>
+                        </button>
+                    </form>
                     <span>{{artwork.likes}}</span>
                 </div>
             </div>

@@ -58,6 +58,37 @@ def home():
     artworks = database.posts.find({}).sort("created_at", -1)
     return render_template('index.html', artworks = artworks)
 
+# This is a route to define when a user presses a like button, it would increment the like value of the post from the dataset
+@app.route('/like/<post_id>', methods=['POST'])
+def like(post_id): 
+    try:
+        # Gets the user's logged in ID
+        user_id = session.get('user_id')
+        action = request.form.get('action')
+
+        # If the user has logged in, then we can do the following
+        if user_id:
+            if action == 'like':
+                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': 1}})
+
+            elif action == 'unlike':
+                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': -1}})
+
+            render_template("index.html")
+        
+        #If the user is not logged in, then it redirects to the login page
+        else:
+            return redirect(url_for('login'))
+        
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to like post", 500
+    
+@app.route('/save_to_gallery')
+def save_to_gallery():
+    render_template("index.html")
+
+
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
