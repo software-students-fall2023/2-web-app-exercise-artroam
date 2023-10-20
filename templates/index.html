@@ -37,18 +37,12 @@
                     <button type="submit" name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
 
                     <!-- Here we get the id of the artwork and send it to the like() function -->
-                    <form action="{{ url_for('like', post_id=artwork._id) }}" method="post" class="like-form">
+                    <form action="{{ url_for('like', post_id=artwork._id) }}" method="post" class="like-form" data-post-id="{{ artwork._id }}" data-likes="{{ artwork.likes }}">
                         <button type="submit" name="likeButton" class="statsButton">
-                            <i class="material-icons">
-                                {% if artwork.user_id in session.get('liked_posts', []) %}
-                                    thumb_down
-                                {% else %}
-                                    thumb_up
-                                {% endif %}
-                            </i>
+                            <i class="material-icons">thumb_up</i>
                         </button>
                     </form>
-                    <span>{{artwork.likes}}</span>
+                    <span style="text-align: center;" class="like-count">{{artwork.likes}}</span>
                 </div>
             </div>
 
@@ -57,7 +51,11 @@
             </div>
 
             <div class="detailsContainer">
-                <div>{{artwork.post_description}}</div>
+                <div class="topDetailsContainer">
+                    <div id="post_title">{{ artwork.post_title }}</div>
+                    <div id="art_type">{{ artwork.art_type|replace("_", " ")|title() }}</div>  
+                </div>
+                <div id="post_description">{{ artwork.post_description }}</div>
             </div>
         </div>
         {% endfor %}

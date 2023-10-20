@@ -60,29 +60,37 @@ def home():
 
 # This is a route to define when a user presses a like button, it would increment the like value of the post from the dataset
 @app.route('/like/<post_id>', methods=['POST'])
-def like(post_id): 
+def like(post_id):
     try:
-        # Gets the user's logged in ID
+        # Get the user's ID (you should implement user authentication)
         user_id = session.get('user_id')
-        action = request.form.get('action')
+        
+        # Check if the user has already liked the post
+        like_record = database.user_likes.find_one({'post_id': post_id, 'user_id': user_id})
+        post = database.posts.find_one({'_id': post_id})
 
-        # If the user has logged in, then we can do the following
         if user_id:
-            if action == 'like':
-                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': 1}})
-
-            elif action == 'unlike':
+            if like_record:
+                # User has already liked the post, so they are unliking it
+                database.user_likes.delete_one({'_id': like_record['_id']})
                 database.posts.update_one({'_id': post_id}, {'$inc': {'likes': -1}})
+                liked = False
+            elif post:
+                # User is liking the post
+                database.user_likes.insert_one({'post_id': post_id, 'user_id': user_id, 'liked': True})
+                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': 1}})
+                liked = True
+            else:
+                return jsonify(success=False, error="Post not found"), 404
 
-            render_template("index.html")
-        
-        #If the user is not logged in, then it redirects to the login page
+            return jsonify(success=True, liked=liked, likes=post['likes'] + (1 if liked else -1))
         else:
-            return redirect(url_for('login'))
-        
+            return jsonify(success=False, error="User not authenticated"), 401
+
     except Exception as e:
         print(f"An error occurred: {e}")
-        return "Failed to like post", 500
+        return jsonify(success=False, error=f"Failed to like post: {str(e)}"), 500
+
     
 @app.route('/save_to_gallery')
 def save_to_gallery():
@@ -176,6 +184,7 @@ def post_data():
         username = session.get('username')
         user_id = session.get('user_id')
         post_description = request.form.get('post_description')
+        post_title = request.form.get('post_title')
         image_type = request.form.get('image_type')
         image_url = session.get('uploaded_file_key', None)
         
@@ -188,8 +197,7 @@ def post_data():
             "user_id": user_id, 
             "username": username,
             "likes": 0,
-            # Create a post title here. 
-            # Create some post tags here as well
+            "post_title": post_title, 
             "post_description": post_description,
             "image_url": image_url,
             "art_type": image_type,

@@ -26,6 +26,21 @@
     object-fit: contain; 
 }
 
+.title-box {
+    padding: 10px;
+    max-width: 600px;  
+    margin: 0 auto;  
+}
+
+#title {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    resize: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+}
+
 .comment-box {
     padding: 10px;
     max-width: 600px;  
@@ -151,8 +166,5 @@
         display: block;
         margin: 0 auto;  
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
+

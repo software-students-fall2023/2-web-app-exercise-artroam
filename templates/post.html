@@ -2,6 +2,7 @@
 
 {% block container %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!-- When the user clicks on the "Go Back" button, it calls the create() once more -->
 <form action="{{ url_for('create') }}" method="post">
@@ -27,8 +28,12 @@
             <option value="visual_art">Visual Art</option>
         </select>
     </div>
+
+    <div class="title-box">
+        <input name="post_title" type="text" id="title" placeholder="Title">
+    </div>
     <div class="comment-box">
-        <textarea name="post_description" id="comment" rows="4" cols="50"></textarea>
+        <textarea name="post_description" id="comment" rows="4" cols="50" placeholder="Description..."></textarea>
     </div>
     <div class="submit-container">
         <button type="submit" id="submit-post">Post</button>

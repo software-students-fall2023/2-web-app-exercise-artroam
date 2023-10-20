@@ -122,12 +122,13 @@
 .statsContainer {
     width: 100px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
 .statsButton{
     padding: 5px;
+    margin: 3px;
 }
 
 .statsButton i{
@@ -145,5 +146,30 @@
 }
 
 .detailsContainer {
-    margin: 10px 0;
+    margin: 15px 0;
+}
+
+.topDetailsContainer{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#post_title{
+    font-size: 1.5em;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#art_type{
+    display: inline-block;
+    background-color: #af8f53;
+    padding: 5px;
+    border-radius: 10px;
+    color: white;
+}
+
+#art_type::first-letter{
+    text-transform: capitalize;
 }
