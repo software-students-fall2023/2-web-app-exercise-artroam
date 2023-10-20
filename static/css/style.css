@@ -38,15 +38,12 @@ button {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 5px;
-<<<<<<< HEAD
     transition: transform 0.2s;
 }
 
 button:active{
     background-color: #fcb532;
     transform: scale(0.98);
-=======
->>>>>>> main
 }
 
 nav {
@@ -71,10 +68,7 @@ nav a {
     display: flex; 
     align-items: center;
     justify-content: center;
-<<<<<<< HEAD
     transition: transform 0.2s;
-=======
->>>>>>> main
 }
 
 .material-icons {
@@ -87,10 +81,7 @@ nav a:hover {
 
 nav a:active {
     background-color: #e0e0e0; 
-<<<<<<< HEAD
     transform: scale(0.98);
-=======
->>>>>>> main
 }
 
 #back-button {
@@ -115,8 +106,7 @@ nav a:active {
     .logo img {
         width: 10%;
         height: 10%;
-    }
-    
+    }  
 
     main {
         padding: 10px;
@@ -128,16 +118,9 @@ nav a:active {
 
     nav a {
         padding: 5px 10px;
-<<<<<<< HEAD
     }
+    
     .material-icons {
         font-size: 32px; 
     }
 }
-=======
-    }
-    .material-icons {
-        font-size: 32px; 
-    }
-}
->>>>>>> main

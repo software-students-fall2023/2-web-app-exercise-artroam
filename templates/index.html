@@ -1,50 +1,24 @@
 {% extends 'base.html' %}
 {% block container %}
-<<<<<<< HEAD
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-=======
-<div class="content"></div>
->>>>>>> main
+<script src="{{ url_for('static', filename='js/explore.js') }}"></script>
 
-
-<!-- This is a container for the search bar -->
-<!-- For now it has no action but when you search something up, there would be a route to find specific posts in the mongodb atlas database (based on usernames and titles) -->
-<div class="search_container">
-    <form action="">
-        <input type="text" placeholder="Search..." name="search">
-        <button type="submit"><i class="material-icons">search</i></button>
-    </form>
-</div>
-
-<!-- This is the container for the dropdown menu -->
-<!-- For now it has no action but when you click one of the filters, there would be a route to find specific tags related with certain posts -->
-<div class="filter_menu">
-    <button id="filterButton">Filter</button>
-    <div class="filter_contents">
-        <!-- Add references to filter out content -->
-        <a href="">Digital Art</a>
-        <a href="">Photography</a>
-        <a href="">Visual Arts</a>
+<div class="nav-container">
+    <div class="search_container">
+        <form action="">
+            <input type="text" placeholder="Search..." name="search">
+            <button type="submit"><i class="material-icons">search</i></button>
+        </form>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const filterButton = document.getElementById("filterButton");
-            const filterContents = document.querySelector(".filter_contents");
-
-            filterButton.addEventListener("click", function (e) {
-                e.stopPropagation(); // Prevent the click event from propagating to the document
-                filterContents.style.display = filterContents.style.display === "block" ? "none" : "block";
-            });
-
-            document.addEventListener("click", function (e) {
-                if (filterContents.style.display === "block" && e.target !== filterButton) {
-                    filterContents.style.display = "none";
-                }
-            });
-        });
-
-    </script>
+    <div class="filter_menu">
+        <button id="filterButton">Filter</button>
+        <ul class="filter_contents">
+            <li><a href="#">Digital Art</a></li>
+            <li><a href="#">Photography</a></li>
+            <li><a href="#">Visual Arts</a></li>
+        </ul>
+    </div>
 </div>
 
 
