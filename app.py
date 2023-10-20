@@ -99,7 +99,7 @@ def gallery():
         return "Failed to submit post", 500
 
 # Handle unlike put request
-@app.put('/<string:post_id>/unlike')
+@app.put('/unlike/<string:post_id>')
 def unlike_post(post_id):
     try:
         user_id = session.get('user_id')
