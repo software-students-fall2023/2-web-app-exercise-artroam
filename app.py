@@ -199,11 +199,95 @@ def profile():
     if 'user_id' in session: 
         user_id = ObjectId(session['user_id'])
         user = database.users.find_one({'_id': user_id})
-        return render_template('profile.html', user=user)
+        user_posts = database.posts.find({"user_id":f"{user_id}"}).sort("created_at", -1)
+
+        if not user_posts:
+            return render_template('profile.html', user=user, user_posts=[])
+        else:
+            return render_template('profile.html', user=user, user_posts=user_posts)
+
     # Else, if they don't have an account, it will redirect them to the login page
     else: 
         return render_template('login.html')
+    
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' in session: 
+        user_id = ObjectId(session['user_id'])
+        user = database.users.find_one({'_id': user_id})
 
+        if request.method == 'POST':
+
+            new_username = request.form['new_username']
+
+            errors = []
+            
+            # Check if any username was provided
+            if new_username != '':
+                # This checks if there is already a user that has this exact username
+                if database.users.find_one({'username': new_username}):
+                    errors.append("Username already exists! Choose another one!")
+                    errors.append(f"{new_username}")
+            
+            if errors:
+                return render_template('edit_profile.html', user=user, errors=errors)
+            
+            else:
+                if new_username != '':
+                    filter = {'_id': user_id}
+                            
+                    update = {'$set': {'username': f"{new_username}"}}
+
+                    database.users.update_one(filter, update)
+
+                    filt = {'user_id': f"{user_id}"}
+
+                    upd = {'$set': {'username': f"{new_username}"}}
+
+                    database.posts.update_many(filt, upd)
+
+                    session.update({"username": new_username})
+
+                    return redirect(url_for('profile'))    
+                
+        return render_template('edit_profile.html', user=user)       
+
+@app.route('/update_pp', methods=['GET', 'POST'])
+def update_pp():
+    if 'user_id' in session: 
+        user_id = ObjectId(session['user_id'])
+        user = database.users.find_one({'_id': user_id})
+
+    if 'profilePicture' not in request.files:
+        return "No file part", 400
+
+    file = request.files['profilePicture']
+    if file.filename == '':
+        return "No selected file", 400
+
+    try:
+        # Upload the image to AWS S3
+        image_data = file.read()
+        file_name = generate_unique_filename(file.filename)
+
+        s3.put_object(Bucket=os.getenv('BUCKET_NAME'), Key=file_name, Body=image_data, ContentType='image/jpeg')
+
+        # Save the image URL to MongoDB
+        session['uploaded_file_key'] = file_name
+        
+        filter = {'_id': user_id}
+
+        image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{session['uploaded_file_key']}"
+
+        update = {'$set': {'avatar_url': f"{image_url}"}}
+        collection = database['users']
+        collection.update_one(filter, update)
+
+        return redirect(url_for('profile'))
+    
+    except Exception:
+        return "AWS credentials not available", 500   
+    
 # This is the function which registers the signup page from the login.html page if the user does click it
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -220,9 +304,6 @@ def signup():
             password = request.form['password']
             confirm_password = request.form['confirm_password']
             email = request.form['email']
-
-            # Debugging console test
-            print(username, password, confirm_password, email)
 
             errors = []
             
@@ -259,11 +340,13 @@ def signup():
                 password_hash = generate_password_hash(password)
 
             # Here we insert their account details to the database
-            database.users.insert_one({
+            collection = database['users']
+            collection.insert_one({
                 'username': username,
                 'password': password_hash,
-                'email': email
-                # Maybe create a favorites array for them here. 
+                'email': email,
+                'favorites': [],
+                'avatar_url': "https://i.stack.imgur.com/l60Hf.png"
             })
 
             # Once that's done, it will redirect the user to the login page where they must login to access the webpage. 
@@ -311,6 +394,49 @@ def login_auth():
             else:
                 errors.append("Invalid username or password!")
                 return render_template('login.html', errors=errors)
+            
+@app.route('/forgot_password', methods = ['GET','POST'])
+def forgot_password():
+    if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            email = request.form['email']
+
+            errors = []
+            
+            user = database.users.find_one({'email': email, 'username':username})
+
+            if not user:
+                errors.append("Invalid username or email!")
+            
+            if len(password) < 8 & len(password) > 20:
+                errors.append("Password must be between 8 and 20 characters long!")
+            
+            if not any(char.isdigit() for char in password):
+                errors.append("Password should have at least one number!")
+            
+            if not any(char.isalpha() for char in password):
+                errors.append("Password should have at least one alphabet!")
+            
+            if not confirm_password == password:
+                errors.append("Passwords do not match!")
+
+            if errors:
+                return render_template('forgot_password.html', errors=errors)
+            
+            else:
+                password_hash = generate_password_hash(password)
+
+                filter = {'email': email, 'username':username}
+                          
+                update = {'$set': {'password': password_hash}}
+
+                database.users.update_one(filter, update)
+                                     
+                return redirect(url_for('login'))
+            
+    return render_template('forgot_password.html')
 
 # Here we have another route, if the user decides to logout, it will pop their user_id from the session and redirect them to the login page
 @app.route('/logout')
