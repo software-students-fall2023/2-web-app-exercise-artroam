@@ -1,14 +1,46 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block container %}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/062ae715b3.js" crossorigin="anonymous"></script>
 
-        <!-- For now a simple div to show the user's entire profile details -->
-        <div class="content">
-            <h1>Profile:</h1>
-            <p>Welcome, {{ user.username }}</p>
-            <p>Email: {{ user.email }}</p>
-        </div>
+        <div class = "container">
+
+            <div class = "ppImg">
+                <img src="{{ user.avatar_url if user.avatar_url else url_for('static', filename='images/avatar.png') }}" alt="avatar" class="ppImg" >
+            </div>
+
+            <div class = "user">
+                <span>{{user.username}}</span>
+            </div>
         
-        <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+            
+        <div class="btnContainer">
+            <a href="{{ url_for('edit_profile') }}" class="btn">Edit Profile</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+
+        {% if user_posts %}
+            {% for post in user_posts %}
+                <div class = "postContainer">
+
+                    <div class = "post">
+                        <img src="{{ post.image_url }}" class="postImg" alt="post">
+                    </div>
+
+                    <div class="likes">
+                        <i class="fa-solid fa-thumbs-up" style="color:#ffa500" class="icn"></i>
+                        <span class="likeStats">{{post.likes}}</span>
+                    </div>
+
+                    <div class="details">
+                        <div>{{post.post_description}}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
 {% endblock %}

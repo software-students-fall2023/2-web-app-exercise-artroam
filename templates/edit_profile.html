@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block container %}
+    <div class="content">
+        <h1> Edit Profile </h1>
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/edit.css') }}"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <form action="/update_pp" method="post" enctype="multipart/form-data">
+            <input type="file" name="profilePicture"  accept="image/*" required>
+            <input type="submit" value="Upload" id="uploadButton" class="button">
+        </form>
+
+        <form method="POST" action="{{url_for('edit_profile')}}">
+            <label for="new_username">Username: </label>
+            <input type="text" name="new_username" id="new_username" value="{{user.username}}"/><br>
+            <button id="submit-pp-changes" type="submit" name="submit" value="Submit" class="button">Submit</button>
+        </form>
+        
+        <p>Changed your mind? <a href="/profile">Go Back to Profile</a></p>
+    </div>
+
+    {% if errors %}
+        <div class="alert">
+            <ul>
+                {% for message in errors %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}   
+    
+{% endblock %}
