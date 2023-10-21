@@ -1,109 +1,175 @@
-/* Apply some basic design and positioning for the filter drop down menu */
-.filter_menu button{
-    background-color: darkblue;
-    color:white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer; 
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search_container {
     display: inline-block;
-    position: fixed;
-    right: 10px; 
+    align-items: center;
 }
 
-/* When you hover over the filter button the colour changes. */
-.filter_menu:hover button{
-    background-color: lightblue;
+.search_container input[type=text] {
+    padding: 6px;
+    font-size: 17px;
+    border: none;
+    border-radius: 5px;
 }
 
-/* Apply some structuring properties for the drop down menus */
-.filter_menu a{
+.search_container button {
+    padding: 6px;
+    border: none;
+    cursor: pointer;
+    margin-left: 0px;
+}
+
+.search_container button i {
+    font-size: 17px;
+}
+
+.page-container {
+    display: flex;
+    justify-content: flex-end; /* Align filter menu to the right */
+}
+
+.filter_menu {
+    position: relative;
+    width: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter_menu button {
+    text-align: center;
+    padding: 6px 15px;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+
+.filter_menu ul {
+    position: absolute;
+    top: 85%;
+    right: 0; 
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; 
+    pointer-events: none;
+}
+
+.filter_menu button:hover + ul, .filter_menu ul:hover{
+    display: block;
+    opacity: 1;
+    z-index: 1;
+    pointer-events: auto;
+}
+
+.filter_menu a {
     display: block;
     color: black;
     text-decoration: none;
-    padding: 10px 10px;
+    text-align: center;
+    padding: 6px 5px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Hiding the elements initially and positioning them absolute to the filter menu */
-.filter_menu .filter_contents{
-    display: none;
-    position: fixed;
-    right: 10px;
-    top: 90px;
-    background-color: hsl(0, 0%, 95%);
-    min-width: 100px;
-    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
+.filter_menu a:hover {
+    background-color: #f7d79d;
+    cursor: pointer;
 }
 
-/* When hovering over the menu, it will show the contents */
-.filter_menu:hover .filter_contents{
-    display: block;
-}
-
-/* Whenever you hover your cursor over any of the menus then it will change the background color of the options */   
-.filter_menu a:hover{ 
-    background-color: hsl(0, 0%, 44%);
-}
-  
-.search_container input[type=text] {
-padding: 6px;
-margin-top: 8px;
-font-size: 17px;
-border: none;
-float: left;
-}
-  
-.search_container button {
-float: left;
-padding: 6px;
-margin-top: 8px;
-margin-right: 16px;
-background: #ddd;
-font-size: 17px;
-border: none;
-cursor: pointer;
-}
-
-/* Creates some space between each post */
 .postContainer {
-    margin-bottom: 40px;
+    margin-top: 50px;
 }
 
-/* Creates dimensions for the profile picture image */
-.profileContainer img {
-    width: 25px;
-    height: 25px;
+.topContainer{
+    height: 50px;  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.artistContainer{
+    display: flex;
+    /* justify-content: flex-start; */
+    align-items: center;
+    /* float: left; */
+}
+
+.topContainer img {
+    width: 35px;
+    height: 35px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 5px;
 }
 
-/* Properties for the username */
-.profileContainer span {
+.topContainer span {
    font-weight: 700;
+   margin-left: 5px;
 }
 
-/* Properties for the likes */
-.likesContainer {
-    height: 30px;
+.statsContainer {
+    width: 100px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 10px 0;
 }
 
-/*  Properteis for the image */
+.statsButton{
+    padding: 5px;
+    margin: 3px;
+}
+
+.statsButton i{
+    font-size: 17px;
+}
+
 .artContainer img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
     width: 370px;
     height: 280px;
     object-fit: cover;
     border-radius: 4px;
 }
 
-/*  */
 .detailsContainer {
-    margin: 10px 0;
+    margin: 15px 0;
+}
+
+.topDetailsContainer{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#post_title{
+    font-size: 1.5em;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#art_type{
+    display: inline-block;
+    background-color: #af8f53;
+    padding: 5px;
+    border-radius: 10px;
+    color: white;
+}
+
+#art_type::first-letter{
+    text-transform: capitalize;
 }

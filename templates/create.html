@@ -2,10 +2,12 @@
 
 {% block container %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/capture.css') }}">
-    <script src="{{ url_for('static', filename='capture.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/capture.js') }}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <a href="{{ url_for('create') }}" id="back-button" style="display: none;"><i class="material-icons">arrow_back</i></a>
- 
+    
+    <!-- This displays the take photo and upload buttons which both have an input type of image input -->
+    <!-- Outputs when clicked on the buttons are on the capture.js file -->
     <div id="options">
         <button class="option-card" id="take-photo-button">
             <i class="material-icons">camera_alt</i>
@@ -16,10 +18,13 @@
         <input type="file" id="file-input" accept="image/*" style="display: none;">
     </div>
     
+    <!-- This displays the camera on the canvas -->
     <div id="camera-container" style="display: none;">
         <video id="camera-feed" autoplay playsinline></video>
         <canvas id="captured-photo" style="display: none;" width="640" height="480"></canvas>
     </div>
+    
+    <!-- This displays the next set of buttons when the user clicks on either upload/take photo -->
     <div id="buttons" style="display: none;">
         <button id="capture-button">Capture</button>
         <button id="retake-button" style="display: none;">Retake</button>

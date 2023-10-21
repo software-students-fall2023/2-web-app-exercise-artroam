@@ -34,22 +34,21 @@ if os.getenv('FLASK_ENV', 'development') =='development':
 
 # Establish a database connection with the MONGO_URI (MongoDB Atlas connection)
 client = MongoClient(os.getenv('MONGO_URI'))
-database = client[os.getenv('MONGO_DBNAME')]
 
 # Checks if the connection has been made, else make an error printout
 try:
-    client.admin.command('ping')                 
+    client.admin.command('ping')          
+    database = client[os.getenv('MONGO_DBNAME')]          
     print('* Connected to MongoDB!')         
 
 except Exception as err:
     print('* "Failed to connect to MongoDB at', os.getenv('MONGO_URI'))
     print('Database connection error:', err) 
 
-# Helper func
+# Helper function for creatte() to generate unique filename for uploads
 def generate_unique_filename(original_filename):
-    extension = original_filename.split('.')[-1]
-    unique_filename = "{}-{}.{}".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), uuid.uuid4(), extension)
-    
+    extension = original_filename.split('.')[-1] # Extracts the file extension
+    unique_filename = "{}-{}.{}".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), uuid.uuid4(), extension) # The filename consists of the "timestamp_randomUUID.file extension)
     return unique_filename
 
 # Routes: 
@@ -64,34 +63,44 @@ def home():
 def create():
     session['image_on_post_page'] = False
     if request.method == 'POST':
+        # If the data that the user is submitting is in json format, we retreive the json data. 
         if request.is_json:
             data = request.get_json()
 
+            # If the data is an image: 
             if 'image' in data:
                 import base64
-                image_data = base64.b64decode(data['image'].split(",")[-1])
-                file_name = generate_unique_filename("image.jpg")
+                image_data = base64.b64decode(data['image'].split(",")[-1]) # Decodes the base64-encoded image data (removes anything not needed)
+                file_name = generate_unique_filename("image.jpg")           # Generates a unique filename for the image. 
+                
+                # Uploads the image as a jpeg to the AWS S3 Bucket, based on the BUCKET_NAME. 
                 s3.put_object(Bucket=os.getenv('BUCKET_NAME'), Key=file_name, Body=image_data, ContentType='image/jpeg')
                 
+                # Update session variables
                 session['uploaded_file_key'] = file_name
                 session['image_viewed'] = False 
                 session['image_on_post_page'] = False
 
+                # Once either uploaded or taken a photo, if image upload is successful, we redirect to the post page where the user can add details to their post. 
                 redirect_url = url_for('post')
                 return jsonify({'redirect': redirect_url})
 
     return render_template('create.html')
 
+
 # Route to gallery
 @app.route('/gallery', methods = ['GET'])
 def gallery():
     try:
+        # Gets the user's logged in ID
         user_id = session.get('user_id')
+
+        # If the user has logged in, then we can do the following
         if user_id:
+            # We essentially get the current_user's favorite array and passes these details to the gallery.html page. 
             current_user = get_user_by_id(user_id)
             favorites = list(get_favorites_by_ids(current_user.get('favorites')))
             return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
-        
         return redirect(url_for('login'))
     
     except Exception as e:
@@ -117,60 +126,63 @@ def unlike_post(post_id):
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
 
-# Route to make a post
+
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     try:
         session['image_on_post_page'] = True
+        # In case the file key (filename) has not been uploaded, we present an error. 
         if 'uploaded_file_key' not in session:
             abort(400, description="Image not found in session")
 
+        # Else, we create a URL for the image: through the BUCKET_NAME and the uploaded_file_key session variable (which is the filename)
         image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{session['uploaded_file_key']}"
 
         session['image_viewed'] = True
-        return render_template('post.html', image_url=image_url)
+        return render_template('post.html', image_url=image_url) # We pass the image URL to the html page to paste it on the front page to let the user confirm it.
 
     except Exception as e:
         print(f"An error occurred: {e}")
         abort(500, description="Internal server error")
         
-# Route to upload posts
+# Route to upload posts - this is when the user actually edits the data regarding the post such as the description/title. 
 @app.route('/post_data', methods=['POST'])
 def post_data():
+    # This accesses the posts cluster in the database
     posts_collection = database['posts']
+    
+    # This gets the user's username, user_id, post description from post.html and the image url
     try:
         username = session.get('username')
         user_id = session.get('user_id')
         post_description = request.form.get('post_description')
+        post_title = request.form.get('post_title')
         image_type = request.form.get('image_type')
         image_url = session.get('uploaded_file_key', None)
         
+        # If the image_url is valid, we update the image_url to its filename
         if image_url:
             image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{image_url}"
+        
+        # We create a post document to upload to the mongoDB atlas database
         post = {
             "user_id": user_id, 
             "username": username,
             "likes": 0,
+            "post_title": post_title, 
             "post_description": post_description,
             "image_url": image_url,
             "art_type": image_type,
             "created_at": datetime.datetime.utcnow()  
         }
 
+        # We insert the page and then redirect to the home page. 
         posts_collection.insert_one(post)
         return redirect(url_for('home'))
     
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
-
-@app.errorhandler(400)
-def bad_request(e):
-    return render_template('error.html', message=e.description), 400
-
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('error.html', message=e.description), 500
 
 # Route to delete image
 @app.route('/delete_image', methods=['POST'])
@@ -251,6 +263,7 @@ def signup():
                 'username': username,
                 'password': password_hash,
                 'email': email
+                # Maybe create a favorites array for them here. 
             })
 
             # Once that's done, it will redirect the user to the login page where they must login to access the webpage. 
@@ -305,10 +318,18 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
-# This is a route to handle any errors that may occur during any HTTP requests
+# This are routes to handle any errors that may occur during any HTTP requests
 @app.errorhandler(Exception)
 def handle_error(err):
     return render_template('error.html', error=err)
+
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('error.html', message=e.description), 400
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html', message=e.description), 500
 
 # Executing the Flask Application: 
 if(__name__ == "__main__"):

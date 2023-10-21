@@ -3,6 +3,7 @@
 {% block container %}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/gallery.css') }}"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   {% if favorites and favorites|length > 0 %}
     {% for favorite in favorites %}
@@ -16,8 +17,8 @@
     
           <div class="iconContainer">
             <div class="iconStats">
-              <button data-post-id="{{ favorite['_id'] }}" class="bookmarkBtn"><i class="fa-solid fa-bookmark icon"></i></button>
-              <span>{{favorite.likes}}</span>
+                <button href="" class="viewerButton"><i class="material-icons">bookmark</i></button>
+                <span>{{favorite.likes}}</span>
             </div>
           </div>
         </div>
@@ -36,7 +37,6 @@
   {% endif %}
 
   {% block javascript %}
-    <script src="https://kit.fontawesome.com/82b68d50e9.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
