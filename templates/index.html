@@ -34,14 +34,8 @@
                 </div>
 
                 <div class="statsContainer">
-                    <button type="submit" name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
-
-                    <!-- Here we get the id of the artwork and send it to the like() function -->
-                    <form action="{{ url_for('like', post_id=artwork._id) }}" method="post" class="like-form" data-post-id="{{ artwork._id }}" data-likes="{{ artwork.likes }}">
-                        <button type="submit" name="likeButton" class="statsButton">
-                            <i class="material-icons">thumb_up</i>
-                        </button>
-                    </form>
+                    <button name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
+                    <button name="likeButton" class="statsButton"><i class="material-icons">thumb_up</i></button>
                     <span style="text-align: center;" class="like-count">{{artwork.likes}}</span>
                 </div>
             </div>

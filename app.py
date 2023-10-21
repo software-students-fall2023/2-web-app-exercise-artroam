@@ -58,45 +58,6 @@ def home():
     artworks = database.posts.find({}).sort("created_at", -1)
     return render_template('index.html', artworks = artworks)
 
-# This is a route to define when a user presses a like button, it would increment the like value of the post from the dataset
-@app.route('/like/<post_id>', methods=['POST'])
-def like(post_id):
-    try:
-        # Get the user's ID (you should implement user authentication)
-        user_id = session.get('user_id')
-        
-        # Check if the user has already liked the post
-        like_record = database.user_likes.find_one({'post_id': post_id, 'user_id': user_id})
-        post = database.posts.find_one({'_id': post_id})
-
-        if user_id:
-            if like_record:
-                # User has already liked the post, so they are unliking it
-                database.user_likes.delete_one({'_id': like_record['_id']})
-                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': -1}})
-                liked = False
-            elif post:
-                # User is liking the post
-                database.user_likes.insert_one({'post_id': post_id, 'user_id': user_id, 'liked': True})
-                database.posts.update_one({'_id': post_id}, {'$inc': {'likes': 1}})
-                liked = True
-            else:
-                return jsonify(success=False, error="Post not found"), 404
-
-            return jsonify(success=True, liked=liked, likes=post['likes'] + (1 if liked else -1))
-        else:
-            return jsonify(success=False, error="User not authenticated"), 401
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return jsonify(success=False, error=f"Failed to like post: {str(e)}"), 500
-
-    
-@app.route('/save_to_gallery')
-def save_to_gallery():
-    render_template("index.html")
-
-
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
