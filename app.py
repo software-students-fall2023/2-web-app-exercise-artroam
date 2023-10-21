@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 import boto3
 import uuid
 import datetime
-from utils import get_user_by_id, get_favorites_by_ids
+from utils import get_user_by_id, get_favorites_by_ids, unlike_post_by_id
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -101,19 +101,30 @@ def gallery():
             current_user = get_user_by_id(user_id)
             favorites = list(get_favorites_by_ids(current_user.get('favorites')))
             return render_template('gallery.html', favorites=favorites, get_user_by_id=get_user_by_id)
-        #If the user is not logged in, then it redirects to the login page
-        else:
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
     
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
 
 # Handle unlike put request
-@app.put('/<string:post_id>/unlike')
+@app.put('/unlike/<string:post_id>')
 def unlike_post(post_id):
-    print(post_id)
-    return f'Post {post_id}'
+    try:
+        user_id = session.get('user_id')
+        if user_id:
+            # update user's like
+            current_user = get_user_by_id(user_id)
+            if current_user.get('favorites') is not None and ObjectId(post_id) in current_user['favorites']:
+                database['users'].update_one({'_id': ObjectId(user_id)}, {'$pull': {'favorites': ObjectId(post_id)}})
+            # update post's like
+            unlike_post_by_id(post_id)
+
+        return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to submit post", 500
 
 
 @app.route('/post', methods=['POST', 'GET'])

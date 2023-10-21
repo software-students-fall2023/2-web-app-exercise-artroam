@@ -43,7 +43,7 @@ function bookmarkBtnOnClick() {
       evt.preventDefault();
 
       $.ajax({
-        url: `/${postId}/unlike`,
+        url: `/unlike/${postId}`,
         type: 'PUT',
         success: (result) => {
           handleSuccess(btn);

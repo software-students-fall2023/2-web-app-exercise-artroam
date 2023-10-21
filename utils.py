@@ -9,6 +9,15 @@ database = client[os.getenv('MONGO_DBNAME')]
 def get_user_by_id(user_id):
     return database['users'].find_one({'_id': ObjectId(user_id)})
 
+def unlike_post_by_id(post_id):
+    post = database['posts'].find_one({'_id': ObjectId(post_id)})
+    if post:
+        current_likes = post['likes']
+        if current_likes > 0:
+            database['posts'].update_one({'_id': ObjectId(post_id)}, {'$set': {'likes': current_likes - 1}})
+    else:
+        return 'no post found'
+
 def get_favorites_by_ids(favorite_ids):
     if favorite_ids is None:
         return []
