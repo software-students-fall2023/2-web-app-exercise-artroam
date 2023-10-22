@@ -1,4 +1,27 @@
-// Waits till the HTML page is loaded
+// This is a function which starts at the very beginning when the webpage is laoded. 
+function loadSavedPosts() {
+    $.ajax({
+        url: "/get_saved_posts",
+        method: "GET",
+        success: function (data) {
+            var savedPosts = data.saved_posts;
+
+            $("button[name='saveButton']").each(function () {
+                var postID = $(this).data('post-id');
+                var button = $(this);
+
+                if (savedPosts.includes(postID)) {
+                    button.css("background-color", "#fdd68f");
+                }
+            });
+        },
+        error: function (err) {
+            console.log('Error loading saved posts:', err);
+        }
+    });
+}
+
+// When the HTML page loads do the following: 
 $(document).ready(function () {
     // When the likeButton is pressed, it will get the postID from the like button associated with the post
     $("button[name='likeButton']").click(function () {
@@ -62,4 +85,8 @@ $(document).ready(function () {
             }
         });
     }); 
+
+
+    // Load saved posts when the page loads
+    loadSavedPosts();
 });

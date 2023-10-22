@@ -157,7 +157,21 @@ def save_post(post_id):
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to save post", 500
+
+
+# This route is loaded at the very beginning when the web page is loaded to remember which posts the user saved
+@app.route('/get_saved_posts', methods=['GET'])
+def get_saved_posts():
+    user_id = session.get('user_id')
     
+    if user_id:
+        user = get_user_by_id(user_id)
+        favorites = user.get('favorites', [])
+        return jsonify({'saved_posts': favorites})
+    
+    else:
+        return jsonify({'saved_posts': []})
+
 
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
