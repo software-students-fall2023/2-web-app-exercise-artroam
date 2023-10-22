@@ -62,19 +62,29 @@ def home():
 @app.route('/search', methods=['GET'])
 def search_posts():
     search_query = request.args.get('search')
-    artworks = database.posts.find({'post_title': {'$regex': search_query, '$options': 'i'}}).sort("created_at", -1)
-    return render_template('index.html', artworks=artworks)
+    
+    # If the search query is a non-character value, we return nothing.
+    if not search_query:
+        print("TEST1")
+        no_posts_found = True
+        artworks = []
+
+    else:
+        artworks = list(database.posts.find({'post_title': {'$regex': search_query, '$options': 'i'}}).sort("created_at", -1))
+        no_posts_found = len(artworks)==0  
+
+    return render_template('index.html', artworks=artworks, no_posts_found=no_posts_found)
 
 # This route is for the filter menu and it only retrieves artworks which have a certain tag.
 @app.route('/filter/<tag>', methods=['GET'])
 def filter_posts(tag):
-    artworks = database.posts.find({'art_type': tag}).sort("created_at", -1)
-    return render_template('index.html', artworks=artworks)
+    artworks = list(database.posts.find({'art_type': tag}).sort("created_at", -1))
+    no_posts_found = len(artworks)==0  
+    return render_template('index.html', artworks=artworks, no_posts_found=no_posts_found)
 
 # This route will allow the user to like a specific post in real time. 
 @app.route('/like_post/<post_id>', methods=['POST'])
 def like_post(post_id):
-
     try:
         # Correctly formatting the post_id
         post_id = ObjectId(post_id)
@@ -109,12 +119,60 @@ def like_post(post_id):
                 print("Not Liking")
                 return jsonify({'error': 'Post not found'}, 404)
 
-        else:
+        elif user_id == None:
             return redirect(url_for('login'))
         
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to like post", 500
+
+
+# This is a route for the explore page for the user to save posts into their favorites array which will therefore save the post to the gallery
+@app.route('/save_post/<post_id>', methods=['POST'])
+def save_post(post_id):
+    try:
+        # Check if the user is logged in
+        user_id = session.get('user_id')
+        if user_id:
+            # Get the current user and their favoritees array
+            current_user = get_user_by_id(user_id)
+            favorites = current_user.get('favorites', [])
+            
+            # Check if the post is already in the user's favorites
+            if post_id in favorites:
+                favorites.remove(post_id)  # Remove the post from favorites
+                saved = False
+            else:
+                favorites.append(post_id)  # Add the post to favorites
+                saved = True
+            
+            # Update the user's favorites array in the database
+            database.users.update_one({'_id': current_user['_id']}, {'$set': {'favorites': favorites}})
+            
+            # Return a JSON response to indicate the post has been saved or removed
+            return jsonify({'favorites': favorites, 'saved': saved})
+        
+        elif user_id == None:
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to save post", 500
+
+
+# This route is loaded at the very beginning when the web page is loaded to remember which posts the user saved
+@app.route('/get_saved_posts', methods=['GET'])
+def get_saved_posts():
+    user_id = session.get('user_id')
+    
+    if user_id:
+        user = get_user_by_id(user_id)
+        favorites = user.get('favorites', [])
+        return jsonify({'saved_posts': favorites})
+    
+    else:
+        return jsonify({'saved_posts': []})
+
 
 
 # Route to upload a photo or take a photo 

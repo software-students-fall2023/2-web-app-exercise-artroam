@@ -1,4 +1,27 @@
-// Waits till the HTML page is loaded
+// This is a function which starts at the very beginning when the webpage is laoded. 
+function loadSavedPosts() {
+    $.ajax({
+        url: "/get_saved_posts",
+        method: "GET",
+        success: function (data) {
+            var savedPosts = data.saved_posts;
+
+            $("button[name='saveButton']").each(function () {
+                var postID = $(this).data('post-id');
+                var button = $(this);
+
+                if (savedPosts.includes(postID)) {
+                    button.css("background-color", "#fdd68f");
+                }
+            });
+        },
+        error: function (err) {
+            console.log('Error loading saved posts:', err);
+        }
+    });
+}
+
+// When the HTML page loads do the following: 
 $(document).ready(function () {
     // When the likeButton is pressed, it will get the postID from the like button associated with the post
     $("button[name='likeButton']").click(function () {
@@ -35,4 +58,35 @@ $(document).ready(function () {
             }
         });
     });
+
+    // This is a function for the save button
+    $("button[name='saveButton']").click(function() {
+        var postID = $(this).data('post-id');
+        var button = $(this);
+        
+        $.ajax({
+            url: "/save_post/" + postID,
+            method: "POST",
+
+            // When AJAX request is a success:
+            success: function(data) {
+                // If we save the post into the gallery then change the icon color
+                if (data.saved) {
+                    button.css("background-color", "#fdd68f")
+                } 
+                
+                else {
+                    button.css("background-color", "#FFA500")
+                }
+            },
+
+            error: function(err) {
+                console.log('Error saving post:', err);
+            }
+        });
+    }); 
+
+
+    // Load saved posts when the page loads
+    loadSavedPosts();
 });
