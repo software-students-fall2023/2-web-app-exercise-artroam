@@ -3,6 +3,7 @@
 {% block container %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}"/>
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/062ae715b3.js" crossorigin="anonymous"></script>
 
@@ -23,24 +24,46 @@
             <a href="{{ url_for('logout') }}" class="btn">Logout</a>
         </div>
 
-        {% if user_posts %}
-            {% for post in user_posts %}
-                <div class = "postContainer">
-
-                    <div class = "post">
-                        <img src="{{ post.image_url }}" class="postImg" alt="post">
-                    </div>
-
-                    <div class="likes">
-                        <i class="fa-solid fa-thumbs-up" style="color:#ffa500" class="icn"></i>
-                        <span class="likeStats">{{post.likes}}</span>
-                    </div>
-
-                    <div class="details">
-                        <div>{{post.post_description}}</div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
+        <div class="posts-wrapper">
+            <section>
+                {% if user_posts %}
+                    {% for post in user_posts %}
+                        <div class="postContainer">
+                            <div class="topContainer">
+                                <div class="artistContainer">
+                                    {% if user.avatar_url %}
+                                        <img src="{{ user.avatar_url }}" alt="User Avatar">
+                                    {% else %}
+                                        <i class="material-icons">person</i>
+                                    {% endif %}
+                                    <span>{{ user.username }}</span>
+                                </div>
+    
+                                <div class="statsContainer">
+                                    <button name="likeButton" class="statsButton" data-post-id="{{ post._id }}">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                    <span class="like-count" data-post-id="{{ post._id }}">{{post.likes}}</span>
+                                </div>
+                            </div>
+    
+                            <div class="artContainer">
+                                <img src="{{post.image_url}}">
+                            </div>
+    
+                            <div class="detailsContainer">
+                                <div class="topDetailsContainer">
+                                    <!-- Added the title for consistency -->
+                                    <div id="post_title">{{ post.post_title }}</div>
+                                </div>
+                                <div id="post_description">{{ post.post_description }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-content-message">No posts created at the moment.</p>
+                {% endif %}
+            </section>
+        </div>
 
 {% endblock %}
