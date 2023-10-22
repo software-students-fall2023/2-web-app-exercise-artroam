@@ -58,6 +58,21 @@ def home():
     artworks = database.posts.find({}).sort("created_at", -1)
     return render_template('index.html', artworks = artworks)
 
+# This route is for the search bar and it finds the posts that have the same title as the user searched for.
+@app.route('/search', methods=['GET'])
+def search_posts():
+    search_query = request.args.get('search')
+    artworks = database.posts.find({'post_title': {'$regex': search_query, '$options': 'i'}}).sort("created_at", -1)
+    return render_template('index.html', artworks=artworks)
+
+# This route is for the filter menu and it only retrieves artworks which have a certain tag.
+@app.route('/filter/<tag>', methods=['GET'])
+def filter_posts(tag):
+    artworks = database.posts.find({'art_type': tag}).sort("created_at", -1)
+    return render_template('index.html', artworks=artworks)
+
+
+
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
