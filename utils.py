@@ -22,4 +22,4 @@ def get_favorites_by_ids(favorite_ids):
     if favorite_ids is None:
         return []
     else:
-        return database['posts'].find({"_id": {"$in": favorite_ids}})
+        return database['posts'].find({"_id": {"$in": favorite_ids}}).sort("created_at", -1)
