@@ -109,7 +109,7 @@ nextButton.addEventListener('click', () => {
 
 // When clicked on the upload photo button, it asks for an input file
 uploadPhotoButton.addEventListener('click', () => {
-    fileInput.click();
+    // fileInput.click();
 });
 
 // This checks if the file is an image file and converts it to base64-encoded string and sends to the server. 

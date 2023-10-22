@@ -4,6 +4,7 @@
 }
 
 .search_container {
+    padding-left: 10px; 
     display: inline-block;
     align-items: center;
 }
@@ -88,8 +89,17 @@
     cursor: pointer;
 }
 
+.posts-wrapper {
+    max-width: 600px; 
+    margin: 0 auto; 
+}
+
 .postContainer {
     margin-top: 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+    overflow: hidden; 
 }
 
 .topContainer{
@@ -101,6 +111,7 @@
 
 .artistContainer{
     display: flex;
+    padding: 10px; 
     /* justify-content: flex-start; */
     align-items: center;
     /* float: left; */
@@ -159,7 +170,18 @@
     font-size: 1.5em;
     font-weight: bold;
     display: inline-block;
-    margin-right: 10px;
+    padding: 10px; 
+}
+
+#post_description {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #333;
+    margin: 10px 15px; 
+    padding: 0 15px; 
+    max-width: 520px; 
+    border-top: 1px solid #eaeaea; 
+    padding-top: 15px; 
 }
 
 #art_type{
@@ -172,4 +194,13 @@
 
 #art_type::first-letter{
     text-transform: capitalize;
+}
+
+.no-content-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    font-size: 1.2em;
+    color: #888;
 }

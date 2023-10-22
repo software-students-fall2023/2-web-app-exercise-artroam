@@ -1,4 +1,68 @@
-.button{
+.content {
+    padding-top: 10px;  /* This will be overridden */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px; /* This will be used instead */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+input[type="text"], input[type="file"], input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+input[type="text"], input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+
+.button {
     background-color: #ffa500; 
     color: #fff; 
     border: none;
@@ -6,5 +70,64 @@
     padding: 10px 50px;
     font-size: 15px;
     transition: background-color 0.3s;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    width: calc(100% - 20px); 
     margin: 10px 10px;
+}
+
+.button:hover {
+    background-color: #ff8c00;
+}
+
+.alert {
+    background-color: #ffcccc;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    color: #cc0000;
+    border: 1px solid #ff0000;
+}
+
+.alert ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.alert li {
+    margin-bottom: 10px;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
+    color: #ffa500;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#delete-account-button {
+    background-color: #f44336;  
+    color: #ffffff;  
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px; 
+    font-size: 15px;
+    transition: background-color 0.3s, transform 0.2s;  
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 20px 0;  
 }
