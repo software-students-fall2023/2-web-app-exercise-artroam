@@ -21,15 +21,16 @@ Artroam is a web application that empowers artists by providing a platform that 
 
 ## Webapp Setup
 1. Go to [AWS website](https://aws.amazon.com/cli/) and download AWS Command Line Interface based on your operating system.
-2. `aws configure`
-3. AWS Access Key ID: &ltValue for variable AWS_ACCESS_KEY_ID in provided .env file&gt
-
-<!-- ```
-aws configure
-AWS Access Key ID: &ltValue for variable AWS_ACCESS_KEY_ID in provided .env file&gt
-AWS Secret Access Key: &ltValue for variable AWS_SECRET_ACCESS_KEY in provided .env file&gt
+2. Go to terminal and type the following line:
+`aws configure`
+3. Follow the prompt and provide values: 
+```
+AWS Access Key ID: <Value for variable AWS_ACCESS_KEY_ID in provided .env file>
+AWS Secret Access Key: <Value for variable AWS_SECRET_ACCESS_KEY in provided .env file>
 Default region name: us-east-1
 Default output format: json
-3. pip install -r requirements.txt
-4. flask run
-``` -->
+```
+4. Type the following line after setting up AWS:
+`pip install -r requirements.txt`
+5. Run the app:
+`flask run`
