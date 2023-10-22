@@ -10,6 +10,7 @@ import boto3
 import uuid
 import datetime
 from utils import get_user_by_id, get_favorites_by_ids, unlike_post_by_id
+from urllib.parse import urlparse
 
 # Initializes the flask application and loads the .env file to retreive information from the MongoDB Atlas Database
 app = Flask(__name__)
@@ -57,7 +58,6 @@ def generate_unique_filename(original_filename):
 def home(): 
     artworks = list(database.posts.find({}).sort("created_at", -1))
     
-    # Enhance artworks with avatar information
     for artwork in artworks:
         user_id = artwork.get('user_id', None)
         if user_id:
@@ -198,6 +198,10 @@ def get_saved_posts():
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
+    
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
     session['image_on_post_page'] = False
     if request.method == 'POST':
         # If the data that the user is submitting is in json format, we retreive the json data. 
@@ -398,28 +402,55 @@ def delete_account():
 
     user_id = ObjectId(session['user_id'])
 
-    # Check if the user exists in the database
     user = database.users.find_one({'_id': user_id})
     if not user:
         return "User not found", 404
 
     try:
+        avatar_url = user.get('avatar_url')
+        if avatar_url:
+            parsed_url = urlparse(avatar_url)
+            avatar_key = parsed_url.path.lstrip('/')
+            s3.delete_object(Bucket=os.getenv('BUCKET_NAME'), Key=avatar_key)
+
         database.users.delete_one({'_id': user_id})
         session.pop('user_id', None)
-        session.pop('uploaded_file_key', None) 
+        session.pop('uploaded_file_key', None)
 
-        # Redirect to homepage
-        return redirect(url_for('home', message="Account successfully deleted. We're sorry to see you go!"))
+        return redirect(url_for('home', message="Account successfully deleted."))
 
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
+
  
+@app.route('/delete_post/<post_id>', methods=['POST'])
+def delete_post(post_id):
+    posts_collection = database.posts
+
+    try:
+        post = posts_collection.find_one({'_id': ObjectId(post_id)})
+
+        if not post:
+            return "Post not found", 404
+
+        image_key = post['image_url'].split(f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/")[-1]
+        s3.delete_object(Bucket=os.getenv('BUCKET_NAME'), Key=image_key)
+        posts_collection.delete_one({'_id': ObjectId(post_id)})
+
+        # Redirect back to profile page
+        return redirect(url_for('profile'))
+
+    except Exception as e:
+        print(f"An error occurred during post deletion: {e}")
+        return "Failed to delete post", 500
 
 @app.route('/update_pp', methods=['GET', 'POST'])
 def update_pp():
-    if 'user_id' in session: 
-        user_id = ObjectId(session['user_id'])
-        user = database.users.find_one({'_id': user_id})
+    if 'user_id' not in session:
+        return "User not authenticated", 403
+
+    user_id = ObjectId(session['user_id'])
+    user = database.users.find_one({'_id': user_id})
 
     if 'profilePicture' not in request.files:
         return "No file part", 400
@@ -429,27 +460,33 @@ def update_pp():
         return "No selected file", 400
 
     try:
-        # Upload the image to AWS S3
+        # If there's an existing profile picture, delete it from S3
+        old_avatar_url = user.get('avatar_url')
+        if old_avatar_url:
+            parsed_url = urlparse(old_avatar_url)
+            old_avatar_key = parsed_url.path.lstrip('/')
+            s3.delete_object(Bucket=os.getenv('BUCKET_NAME'), Key=old_avatar_key)
+
+        # Upload the new image to AWS S3
         image_data = file.read()
         file_name = generate_unique_filename(file.filename)
 
         s3.put_object(Bucket=os.getenv('BUCKET_NAME'), Key=file_name, Body=image_data, ContentType='image/jpeg')
 
-        # Save the image URL to MongoDB
+        # Save the new image URL to MongoDB
         session['uploaded_file_key'] = file_name
-        
-        filter = {'_id': user_id}
-
         image_url = f"https://{os.getenv('BUCKET_NAME')}.s3.amazonaws.com/{session['uploaded_file_key']}"
 
+        filter = {'_id': user_id}
         update = {'$set': {'avatar_url': f"{image_url}"}}
         collection = database['users']
         collection.update_one(filter, update)
 
         return redirect(url_for('profile'))
-    
+
     except Exception:
-        return "AWS credentials not available", 500   
+        return "AWS credentials not available", 500
+ 
     
 # This is the function which registers the signup page from the login.html page if the user does click it
 @app.route('/signup', methods=['GET', 'POST'])
