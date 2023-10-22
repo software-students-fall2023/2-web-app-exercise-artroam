@@ -85,7 +85,6 @@ def filter_posts(tag):
 # This route will allow the user to like a specific post in real time. 
 @app.route('/like_post/<post_id>', methods=['POST'])
 def like_post(post_id):
-
     try:
         # Correctly formatting the post_id
         post_id = ObjectId(post_id)
@@ -127,6 +126,38 @@ def like_post(post_id):
         print(f"An error occurred: {e}")
         return "Failed to like post", 500
 
+
+# This is a route for the explore page for the user to save posts into their favorites array which will therefore save the post to the gallery
+@app.route('/save_post/<post_id>', methods=['POST'])
+def save_post(post_id):
+    try:
+        # Check if the user is logged in
+        user_id = session.get('user_id')
+        if user_id:
+            # Get the current user and their favoritees array
+            current_user = get_user_by_id(user_id)
+            favorites = current_user.get('favorites', [])
+            
+            # Check if the post is already in the user's favorites
+            if post_id in favorites:
+                favorites.remove(post_id)  # Remove the post from favorites
+                saved = False
+            else:
+                favorites.append(post_id)  # Add the post to favorites
+                saved = True
+            
+            # Update the user's favorites array in the database
+            database.users.update_one({'_id': current_user['_id']}, {'$set': {'favorites': favorites}})
+            
+            # Return a JSON response to indicate the post has been saved or removed
+            return jsonify({'favorites': favorites, 'saved': saved})
+        else:
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to save post", 500
+    
 
 # Route to upload a photo or take a photo 
 @app.route('/create', methods=['POST', 'GET'])

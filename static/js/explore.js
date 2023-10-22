@@ -35,4 +35,31 @@ $(document).ready(function () {
             }
         });
     });
+
+    // This is a function for the save button
+    $("button[name='saveButton']").click(function() {
+        var postID = $(this).data('post-id');
+        var button = $(this);
+        
+        $.ajax({
+            url: "/save_post/" + postID,
+            method: "POST",
+
+            // When AJAX request is a success:
+            success: function(data) {
+                // If we save the post into the gallery then change the icon color
+                if (data.saved) {
+                    button.css("background-color", "#fdd68f")
+                } 
+                
+                else {
+                    button.css("background-color", "#FFA500")
+                }
+            },
+
+            error: function(err) {
+                console.log('Error saving post:', err);
+            }
+        });
+    }); 
 });
