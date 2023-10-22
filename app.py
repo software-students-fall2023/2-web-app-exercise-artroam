@@ -140,17 +140,18 @@ def save_post(post_id):
             
             # Check if the post is already in the user's favorites
             if post_id in favorites:
-                favorites.remove(post_id)  # Remove the post from favorites
+                favorites.remove(ObjectId(post_id))  # Remove the post from favorites
                 saved = False
             else:
-                favorites.append(post_id)  # Add the post to favorites
+                favorites.insert(0, ObjectId(post_id))  # Add the post to favorites
+                print(favorites)
                 saved = True
             
             # Update the user's favorites array in the database
             database.users.update_one({'_id': current_user['_id']}, {'$set': {'favorites': favorites}})
             
             # Return a JSON response to indicate the post has been saved or removed
-            return jsonify({'favorites': favorites, 'saved': saved})
+            return jsonify({'favorites': list(map(lambda x: str(x), favorites)), 'saved': saved})
         
         elif user_id == None:
             return redirect(url_for('login'))
