@@ -119,7 +119,7 @@ def like_post(post_id):
                 print("Not Liking")
                 return jsonify({'error': 'Post not found'}, 404)
 
-        else:
+        elif user_id == None:
             return redirect(url_for('login'))
         
     except Exception as e:
@@ -151,7 +151,8 @@ def save_post(post_id):
             
             # Return a JSON response to indicate the post has been saved or removed
             return jsonify({'favorites': favorites, 'saved': saved})
-        else:
+        
+        elif user_id == None:
             return redirect(url_for('login'))
     
     except Exception as e:
@@ -171,6 +172,7 @@ def get_saved_posts():
     
     else:
         return jsonify({'saved_posts': []})
+
 
 
 # Route to upload a photo or take a photo 
