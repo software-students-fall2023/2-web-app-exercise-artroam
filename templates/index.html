@@ -5,7 +5,7 @@
 
 <div class="nav-container">
     <div class="search_container">
-        <form action="">
+        <form action="{{url_for('search_posts')}}" method="get">
             <input type="text" placeholder="Search..." name="search">
             <button type="submit"><i class="material-icons">search</i></button>
         </form>
@@ -14,9 +14,10 @@
     <div class="filter_menu">
         <button id="filterButton">Filter</button>
         <ul class="filter_contents">
-            <li><a href="#">Digital Art</a></li>
-            <li><a href="#">Photography</a></li>
-            <li><a href="#">Visual Arts</a></li>
+            <li><a href="{{ url_for('home') }}">All</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='digital_art') }}">Digital Art</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='photography') }}">Photography</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='visual_art') }}">Visual Art</a></li>            
         </ul>
     </div>
 </div>
