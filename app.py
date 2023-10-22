@@ -62,14 +62,25 @@ def home():
 @app.route('/search', methods=['GET'])
 def search_posts():
     search_query = request.args.get('search')
-    artworks = database.posts.find({'post_title': {'$regex': search_query, '$options': 'i'}}).sort("created_at", -1)
-    return render_template('index.html', artworks=artworks)
+    
+    # If the search query is a non-character value, we return nothing.
+    if not search_query:
+        print("TEST1")
+        no_posts_found = True
+        artworks = []
+
+    else:
+        artworks = list(database.posts.find({'post_title': {'$regex': search_query, '$options': 'i'}}).sort("created_at", -1))
+        no_posts_found = len(artworks)==0  
+
+    return render_template('index.html', artworks=artworks, no_posts_found=no_posts_found)
 
 # This route is for the filter menu and it only retrieves artworks which have a certain tag.
 @app.route('/filter/<tag>', methods=['GET'])
 def filter_posts(tag):
-    artworks = database.posts.find({'art_type': tag}).sort("created_at", -1)
-    return render_template('index.html', artworks=artworks)
+    artworks = list(database.posts.find({'art_type': tag}).sort("created_at", -1))
+    no_posts_found = len(artworks)==0  
+    return render_template('index.html', artworks=artworks, no_posts_found=no_posts_found)
 
 # This route will allow the user to like a specific post in real time. 
 @app.route('/like_post/<post_id>', methods=['POST'])

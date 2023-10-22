@@ -27,39 +27,43 @@
 
 <!-- Main section which shows all the posts in the database-->
 <section>
-    {% if artworks %}
-        {% for artwork in artworks %}
-        <div class="postContainer">
-            <div class="topContainer">
-                <div class="artistContainer">
-                    <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
-                    <span>{{artwork.username}}</span>
-                </div>
-
-                <div class="statsContainer">
-                    <button name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
-                    <button name="likeButton" class="statsButton" data-post-id="{{ artwork._id }}"><i class="material-icons">thumb_up</i></button>
-                    <span style="text-align: center;" class="like-count" data-post-id="{{ artwork._id }}">{{artwork.likes}}</span>
-                </div>
-            </div>
-
-            <div class="artContainer">
-                <img src="{{artwork.image_url}}">
-            </div>
-
-            <div class="detailsContainer">
-                <div class="topDetailsContainer">
-                    <div id="post_title">{{ artwork.post_title }}</div>
-                    <div id="art_type">{{ artwork.art_type|replace("_", " ")|title() }}</div>  
-                </div>
-                <div id="post_description">{{ artwork.post_description }}</div>
-            </div>
-        </div>
-        {% endfor %}
-
-    <!-- If there are no images in the database or images under a specific tag, then it will display this -->
+    {% if no_posts_found %}
+        <p style="display:flex; justify-content: center; align-items: center; margin-top: 50px;">No posts of this type at the moment</p>
     {% else %}
-        <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks posted!</p>
+        {% if artworks %}
+            {% for artwork in artworks %}
+            <div class="postContainer">
+                <div class="topContainer">
+                    <div class="artistContainer">
+                        <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
+                        <span>{{artwork.username}}</span>
+                    </div>
+
+                    <div class="statsContainer">
+                        <button name="saveButton" class="statsButton"><i class="material-icons">bookmark</i></button>
+                        <button name="likeButton" class="statsButton" data-post-id="{{ artwork._id }}"><i class="material-icons">thumb_up</i></button>
+                        <span style="text-align: center;" class="like-count" data-post-id="{{ artwork._id }}">{{artwork.likes}}</span>
+                    </div>
+                </div>
+
+                <div class="artContainer">
+                    <img src="{{artwork.image_url}}">
+                </div>
+
+                <div class="detailsContainer">
+                    <div class="topDetailsContainer">
+                        <div id="post_title">{{ artwork.post_title }}</div>
+                        <div id="art_type">{{ artwork.art_type|replace("_", " ")|title() }}</div>  
+                    </div>
+                    <div id="post_description">{{ artwork.post_description }}</div>
+                </div>
+            </div>
+            {% endfor %}
+
+        <!-- If there are no images in the database or images under a specific tag, then it will display this -->
+        {% else %}
+            <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks posted!</p>
+        {% endif %}
     {% endif %}
 </section>
 {% endblock %}
