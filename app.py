@@ -71,6 +71,50 @@ def filter_posts(tag):
     artworks = database.posts.find({'art_type': tag}).sort("created_at", -1)
     return render_template('index.html', artworks=artworks)
 
+# This route will allow the user to like a specific post in real time. 
+@app.route('/like_post/<post_id>', methods=['POST'])
+def like_post(post_id):
+
+    try:
+        # Correctly formatting the post_id
+        post_id = ObjectId(post_id)
+
+        # Finding the post from the database and the user_id (in session)
+        post = database.posts.find_one({'_id': post_id})
+        user_id = session.get('user_id')
+
+        # If the user is logged in they can like the posts, otherwise, it will redirect them to the login page. 
+        if user_id:
+            # If the post is a valid post in the database it checks 
+            if post:
+                # Retrieve the array of users who liked the post from the database
+                users_that_like_post = post.get('users_that_like_post', [])
+
+                # If the user is not in the array of users that likes the post, this means they like the post and therefore are added to the array
+                # Likewise, if the user is in the array of users that likes the post, this means they want to unlike the post and are thus removed from this array
+                if user_id in users_that_like_post:
+                    users_that_like_post.remove(user_id)
+                    liked = False
+                else:
+                    users_that_like_post.append(user_id)
+                    liked = True
+
+                # Update the database
+                database.posts.update_one({'_id': post_id}, {'$set': {'likes': len(users_that_like_post), 'users_that_like_post': users_that_like_post}})
+
+                # Return the updated like count based on the number of people in the user_that_likes_post array
+                return jsonify({'likes': len(users_that_like_post), 'liked': liked})
+
+            else:
+                print("Not Liking")
+                return jsonify({'error': 'Post not found'}, 404)
+
+        else:
+            return redirect(url_for('login'))
+        
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "Failed to like post", 500
 
 
 # Route to upload a photo or take a photo 
