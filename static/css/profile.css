@@ -3,6 +3,8 @@
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 a {
@@ -18,6 +20,7 @@ a {
     border-radius: 50%;
     background-color: #ccc;
     margin: 0 auto 20px;
+    object-fit: cover; 
 }
 
 .user{
@@ -26,60 +29,15 @@ a {
     margin: 10px 0;
 }
 
-.postContainer{
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: 40px;
-    margin-top: 40px;
-}
-
-.post{
-    background-color: #fff;
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.postImg{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    width: 370px;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.details{
-    margin: 10px 0;
-    text-align: left;
-}
-
-.likes{
-    height: 30px;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.icn{
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-}
-
-.likeStats{
-    font-size: 15px;
-    font-weight: bold;
-    color: #ffa500;
-    margin-left: 5px;
-}
 
 .noPost{
     font-size: 10px;
     margin: 10px 0;
+}
+
+.btnContainer{
+    padding-top: 10px; 
+    text-align: center;
 }
 
 .btn{

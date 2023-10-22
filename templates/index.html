@@ -26,6 +26,7 @@
 
 
 <!-- Main section which shows all the posts in the database-->
+<div class="posts-wrapper">
 <section>
     {% if no_posts_found %}
         <p style="display:flex; justify-content: center; align-items: center; margin-top: 50px;">No posts of this type at the moment</p>
@@ -35,7 +36,11 @@
             <div class="postContainer">
                 <div class="topContainer">
                     <div class="artistContainer">
-                        <img src="{{ artwork.profile_picture if artwork.profile_picture else url_for('static', filename='images/avatar.png') }}">
+                        {% if artwork.avatar_url %}
+                        <img src="{{ artwork.avatar_url }}" alt="User Avatar">
+                        {% else %}
+                        <i class="material-icons">person</i>
+                        {% endif %}
                         <span>{{artwork.username}}</span>
                     </div>
 
@@ -62,8 +67,9 @@
 
         <!-- If there are no images in the database or images under a specific tag, then it will display this -->
         {% else %}
-            <p style="display:flex; justify-content: center; align-items: center;">Currently no artworks posted!</p>
+        <p class="no-content-message">No posts created at the moment.</p>
         {% endif %}
     {% endif %}
 </section>
+</div>
 {% endblock %}

@@ -55,8 +55,27 @@ def generate_unique_filename(original_filename):
 # Default home route which will be the explore page         
 @app.route('/')
 def home(): 
-    artworks = database.posts.find({}).sort("created_at", -1)
-    return render_template('index.html', artworks = artworks)
+    artworks = list(database.posts.find({}).sort("created_at", -1))
+    
+    # Enhance artworks with avatar information
+    for artwork in artworks:
+        user_id = artwork.get('user_id', None)
+        if user_id:
+            try:
+                user_object_id = ObjectId(user_id)
+                user = database.users.find_one({'_id': user_object_id})
+                if user:
+                    artwork['avatar_url'] = user.get('avatar_url', None) 
+                    print(f"User ID: {user_id} -> Avatar URL: {artwork['avatar_url']}")
+                else:
+                    print(f"No user found for User ID: {user_id}")
+            except Exception as e:
+                print(f"Error converting user_id {user_id} to ObjectId: {e}")
+        else:
+            print("No user_id field in this artwork.")
+    
+    return render_template('index.html', artworks=artworks)
+
 
 # This route is for the search bar and it finds the posts that have the same title as the user searched for.
 @app.route('/search', methods=['GET'])
@@ -367,7 +386,33 @@ def edit_profile():
 
                     return redirect(url_for('profile'))    
                 
-        return render_template('edit_profile.html', user=user)       
+        return render_template('edit_profile.html', user=user)      
+    
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    # Check if user is authenticated
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = ObjectId(session['user_id'])
+
+    # Check if the user exists in the database
+    user = database.users.find_one({'_id': user_id})
+    if not user:
+        return "User not found", 404
+
+    try:
+        database.users.delete_one({'_id': user_id})
+        session.pop('user_id', None)
+        session.pop('uploaded_file_key', None) 
+
+        # Redirect to homepage
+        return redirect(url_for('home', message="Account successfully deleted. We're sorry to see you go!"))
+
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
+ 
 
 @app.route('/update_pp', methods=['GET', 'POST'])
 def update_pp():
