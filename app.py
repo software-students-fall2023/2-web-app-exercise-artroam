@@ -209,6 +209,20 @@ def get_liked_posts(post_id):
     else:
         return jsonify({'users_that_liked_post': [], 'post_id': post_id})
 
+# Other user's page
+@app.route('/user/<username>', methods=['GET'])
+def user_profile(username):
+    # Fetch the user based on the username
+    user = database.users.find_one({'username': username})
+
+    user_posts = database.posts.find({"username":username}).sort("created_at", -1)
+
+    if not user:
+        # No user found, return 404 or redirect
+        abort(404)
+
+    return render_template('user.html', user=user, user_posts=user_posts)
+
 
 # This route is loaded at the very beginning when the web page is loaded to display which posts have how many likes at the start
 @app.route('/get_like_count/<post_id>', methods=['GET'])

@@ -13,7 +13,7 @@
         <div class="topContainer">
             <div class="artistContainer">
                 <img src="{{ user.avatar_url if user.avatar_url else url_for('static', filename='images/avatar.png') }}" alt="avatar"/>
-                <span>{{favorite.username}}</span>
+                <span><a href="{{ url_for('user_profile', username=favorite.username) }}" style="color: black;">{{favorite.username}}</a></span>
             </div>
             <div class="iconContainer">
                 <button class="bookmarkBtn" data-post-id="{{ favorite['_id'] }}"><i class="material-icons">bookmark</i></button>

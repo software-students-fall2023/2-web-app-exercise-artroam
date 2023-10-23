@@ -58,3 +58,11 @@ a {
     background-color: #f44336;  
 }
 
+#back-btn {
+    margin-left:20px; 
+    margin-top:20px; 
+    border: none;
+    color: #D47500;             
+    cursor: pointer;      
+    display: block;
+}
