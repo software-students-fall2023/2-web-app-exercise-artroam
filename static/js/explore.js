@@ -36,6 +36,10 @@ $(document).ready(function () {
 
             // When AJAX request is a success:
             success: function (data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;  // Redirect to the URL sent by the server which would be the login page if the user_id is None.
+                }
+
                 // Updates the like value in realtime on the webpage
                 if (likeCount) {
                     likeCount.text(data.likes);
@@ -70,6 +74,10 @@ $(document).ready(function () {
 
             // When AJAX request is a success:
             success: function(data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;  // Redirect to the URL sent by the server which would be the login page if the user_id is None.
+                }
+
                 // If we save the post into the gallery then change the icon color
                 if (data.saved) {
                     button.css("background-color", "#fdd68f")

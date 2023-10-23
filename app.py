@@ -137,9 +137,9 @@ def like_post(post_id):
             else:
                 print("Not Liking")
                 return jsonify({'error': 'Post not found'}, 404)
-
+        
         elif user_id == None:
-            return redirect(url_for('login'))
+            return jsonify({'redirect': url_for('login')})
         
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -173,8 +173,8 @@ def save_post(post_id):
             return jsonify({'favorites': list(map(lambda x: str(x), favorites)), 'saved': saved})
         
         elif user_id == None:
-            return redirect(url_for('login'))
-    
+            return jsonify({'redirect': url_for('login')})
+
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to save post", 500
