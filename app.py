@@ -186,10 +186,13 @@ def get_saved_posts():
     if user_id:
         user = get_user_by_id(user_id)
         favorites = user.get('favorites', [])
+        # Convert ObjectID to string for comparison
+        favorites = [str(fav) for fav in favorites]
         return jsonify({'saved_posts': favorites, 'user_in_session': user_id})
     
     else:
-        return jsonify({'saved_posts': [], 'user_in_session': user_id})
+        return jsonify({'saved_posts': []})
+
 
 # This route is loaded at the very beginning when the web page is loaded to remember which posts the user liked for the button
 @app.route('/get_liked_posts/<post_id>', methods=['GET'])

@@ -1,29 +1,31 @@
-// This is a function which starts at the very beginning when the webpage is laoded. 
+// Function which starts at the beginning to store which posts the user has saved.
 function loadSavedPosts() {
-    $.ajax({
-        url: "/get_saved_posts",
-        method: "GET",
-        success: function (data) {
-            var button = $(this);
-            var savedPosts = data.saved_posts.map(String); // Convert ObjectID to strings
+    $("button[name='saveButton']").each(function () {
+        var postID = $(this).data('post-id');
+        var button = $(this);
 
-            $("button[name='saveButton']").each(function () {
-                var postID = $(this).data('post-id').toString(); // Convert postID to a string
-
+        $.ajax({
+            url: "/get_saved_posts",
+            method: "GET",
+            success: function (data) {
+                var savedPosts = data.saved_posts;
                 if (savedPosts.includes(postID)) {
                     button.css("background-color", "#fdd68f");
                 } else {
                     button.css("background-color", "#FFA500");
                 }
-            });
-        },
-        error: function (err) {
-            console.log('Error loading saved posts:', err);
-        }
+            },
+            error: function (err) {
+                console.log('Error loading saved posts:', err);
+            }
+        });
     });
 }
 
-// This is a function which srarts at the very beginning when the webpage is loaded. 
+
+
+
+// This is a function which starts at the very beginning when the webpage is loaded. 
 function loadLikeCounts() {
     $("button[name='likeButton']").each(function () {
         var postID = $(this).data('post-id');
@@ -63,7 +65,9 @@ function loadLikedPosts() {
                 // If the user is in the usersThatLikedPost array, it indicates they have liked the post before
                 if (usersThatLikedPost.includes(userInSession)) {
                     button.css("background-color", "#fdd68f");
-                } else {
+                } 
+                
+                else {
                     button.css("background-color", "#FFA500");
                 }
             },
