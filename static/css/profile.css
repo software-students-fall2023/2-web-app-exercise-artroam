@@ -52,3 +52,9 @@ a {
     margin: 0 10px;   
 }
 
+.deletePostButton {
+    font-size: 17px;
+    padding: 5px;
+    background-color: #f44336;  
+}
+
