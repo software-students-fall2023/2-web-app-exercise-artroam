@@ -137,9 +137,9 @@ def like_post(post_id):
             else:
                 print("Not Liking")
                 return jsonify({'error': 'Post not found'}, 404)
-
+        
         elif user_id == None:
-            return redirect(url_for('login'))
+            return jsonify({'redirect': url_for('login')})
         
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -173,8 +173,8 @@ def save_post(post_id):
             return jsonify({'favorites': list(map(lambda x: str(x), favorites)), 'saved': saved})
         
         elif user_id == None:
-            return redirect(url_for('login'))
-    
+            return jsonify({'redirect': url_for('login')})
+
     except Exception as e:
         print(f"An error occurred: {e}")
         return "Failed to save post", 500
@@ -193,6 +193,22 @@ def get_saved_posts():
     else:
         return jsonify({'saved_posts': []})
 
+# This route is loaded at the very beginning when the web page is loaded to display which posts have how many likes at the start
+@app.route('/get_like_count/<post_id>', methods=['GET'])
+def get_like_count(post_id):
+    try:
+        # Retrieve the post from the database
+        post = database.posts.find_one({'_id': ObjectId(post_id)})
+        
+        if post:
+            # Get the like count from the post
+            likes = post.get('likes', 0)
+            return jsonify({'likes': likes})
+        else:
+            return jsonify({'likes': 0})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({'likes': 0})
 
 
 # Route to upload a photo or take a photo 
