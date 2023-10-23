@@ -41,7 +41,7 @@
                         {% else %}
                         <i class="material-icons">person</i>
                         {% endif %}
-                        <span>{{artwork.username}}</span>
+                        <span><a href="{{ url_for('user_profile', username=artwork.username) }}" style="color: black;">{{artwork.username}}</a></span>
                     </div>
 
                     <div class="statsContainer">
