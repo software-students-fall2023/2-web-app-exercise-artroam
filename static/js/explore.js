@@ -4,14 +4,16 @@ function loadSavedPosts() {
         url: "/get_saved_posts",
         method: "GET",
         success: function (data) {
-            var savedPosts = data.saved_posts;
+            var button = $(this);
+            var savedPosts = data.saved_posts.map(String); // Convert ObjectID to strings
 
             $("button[name='saveButton']").each(function () {
-                var postID = $(this).data('post-id');
-                var button = $(this);
+                var postID = $(this).data('post-id').toString(); // Convert postID to a string
 
                 if (savedPosts.includes(postID)) {
                     button.css("background-color", "#fdd68f");
+                } else {
+                    button.css("background-color", "#FFA500");
                 }
             });
         },
@@ -25,19 +27,48 @@ function loadSavedPosts() {
 function loadLikeCounts() {
     $("button[name='likeButton']").each(function () {
         var postID = $(this).data('post-id');
-        var likeCount = $(".like-count[data-post-id='" + postID + "']");
         
         // Here we use AJAX to get the like counts for each post
         $.ajax({
             url: "/get_like_count/" + postID,
             method: "GET",
             success: function (data) {
+                var likeCount = $(".like-count[data-post-id='" + postID + "']");
+
                 if (likeCount) {
                     likeCount.text(data.likes);
                 }
             },
             error: function (err) {
                 console.log('Error loading like counts:', err);
+            }
+        });
+    });
+}
+
+// This is a function which starts at the very beginning when the webpage is laoded. 
+function loadLikedPosts() {
+    $("button[name='likeButton']").each(function () {
+        var button = $(this);
+        var postID = button.data('post-id'); // Get the post ID associated with the current button
+
+        // Here we use AJAX to get the user's liked posts
+        $.ajax({
+            url: "/get_liked_posts/" + postID,
+            method: "GET",
+            success: function (data) {
+                var usersThatLikedPost = data.users_that_liked_post;
+                var userInSession = data.user_in_session;
+
+                // If the user is in the usersThatLikedPost array, it indicates they have liked the post before
+                if (usersThatLikedPost.includes(userInSession)) {
+                    button.css("background-color", "#fdd68f");
+                } else {
+                    button.css("background-color", "#FFA500");
+                }
+            },
+            error: function (err) {
+                console.log('Error loading liked posts:', err);
             }
         });
     });
@@ -51,7 +82,7 @@ $(document).ready(function () {
         var postID = $(this).data('post-id');
         var button = $(this); //Reference to the button clicked
         var likeCount = $(".like-count[data-post-id='" + postID + "']"); //Reference for the likeCount for the post
-        
+
         // Here we use AJAX to update the webpage in real time, no reloading page
         $.ajax({
             url: "/like_post/" + postID,
@@ -59,6 +90,7 @@ $(document).ready(function () {
 
             // When AJAX request is a success:
             success: function (data) {
+
                 if (data.redirect) {
                     window.location.href = data.redirect;  // Redirect to the URL sent by the server which would be the login page if the user_id is None.
                 }
@@ -97,6 +129,7 @@ $(document).ready(function () {
 
             // When AJAX request is a success:
             success: function(data) {
+
                 if (data.redirect) {
                     window.location.href = data.redirect;  // Redirect to the URL sent by the server which would be the login page if the user_id is None.
                 }
@@ -120,6 +153,9 @@ $(document).ready(function () {
 
     // Load saved posts when the page loads
     loadSavedPosts();
+
+    // Load liked posts when the page loads
+    loadLikedPosts();
 
     // Load the likes number per each post: 
     loadLikeCounts()

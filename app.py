@@ -66,7 +66,7 @@ def home():
                 user = database.users.find_one({'_id': user_object_id})
                 if user:
                     artwork['avatar_url'] = user.get('avatar_url', None) 
-                    print(f"User ID: {user_id} -> Avatar URL: {artwork['avatar_url']}")
+                    # print(f"User ID: {user_id} -> Avatar URL: {artwork['avatar_url']}")
                 else:
                     print(f"No user found for User ID: {user_id}")
             except Exception as e:
@@ -84,7 +84,6 @@ def search_posts():
     
     # If the search query is a non-character value, we return nothing.
     if not search_query:
-        print("TEST1")
         no_posts_found = True
         artworks = []
 
@@ -135,7 +134,6 @@ def like_post(post_id):
                 return jsonify({'likes': len(users_that_like_post), 'liked': liked})
 
             else:
-                print("Not Liking")
                 return jsonify({'error': 'Post not found'}, 404)
         
         elif user_id == None:
@@ -156,14 +154,14 @@ def save_post(post_id):
             # Get the current user and their favoritees array
             current_user = get_user_by_id(user_id)
             favorites = current_user.get('favorites', [])
-            
+            post_id = ObjectId(post_id)
+
             # Check if the post is already in the user's favorites
             if post_id in favorites:
                 favorites.remove(ObjectId(post_id))  # Remove the post from favorites
                 saved = False
             else:
                 favorites.insert(0, ObjectId(post_id))  # Add the post to favorites
-                print(favorites)
                 saved = True
             
             # Update the user's favorites array in the database
@@ -188,10 +186,26 @@ def get_saved_posts():
     if user_id:
         user = get_user_by_id(user_id)
         favorites = user.get('favorites', [])
-        return jsonify({'saved_posts': favorites})
+        return jsonify({'saved_posts': favorites, 'user_in_session': user_id})
     
     else:
-        return jsonify({'saved_posts': []})
+        return jsonify({'saved_posts': [], 'user_in_session': user_id})
+
+# This route is loaded at the very beginning when the web page is loaded to remember which posts the user liked for the button
+@app.route('/get_liked_posts/<post_id>', methods=['GET'])
+def get_liked_posts(post_id):
+    user_id = session.get('user_id')
+
+    # Finding the post from the database and the user_id (in session)
+    post = database.posts.find_one({'_id': ObjectId(post_id)})
+
+    if user_id:
+        users_that_likes_posts = post.get('users_that_like_post', [])
+        return jsonify({'users_that_liked_post': users_that_likes_posts, 'user_in_session': user_id})
+    
+    else:
+        return jsonify({'users_that_liked_post': [], 'post_id': post_id})
+
 
 # This route is loaded at the very beginning when the web page is loaded to display which posts have how many likes at the start
 @app.route('/get_like_count/<post_id>', methods=['GET'])
