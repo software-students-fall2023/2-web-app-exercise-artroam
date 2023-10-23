@@ -21,6 +21,29 @@ function loadSavedPosts() {
     });
 }
 
+// This is a function which srarts at the very beginning when the webpage is loaded. 
+function loadLikeCounts() {
+    $("button[name='likeButton']").each(function () {
+        var postID = $(this).data('post-id');
+        var likeCount = $(".like-count[data-post-id='" + postID + "']");
+        
+        // Here we use AJAX to get the like counts for each post
+        $.ajax({
+            url: "/get_like_count/" + postID,
+            method: "GET",
+            success: function (data) {
+                if (likeCount) {
+                    likeCount.text(data.likes);
+                }
+            },
+            error: function (err) {
+                console.log('Error loading like counts:', err);
+            }
+        });
+    });
+}
+
+
 // When the HTML page loads do the following: 
 $(document).ready(function () {
     // When the likeButton is pressed, it will get the postID from the like button associated with the post
@@ -97,4 +120,7 @@ $(document).ready(function () {
 
     // Load saved posts when the page loads
     loadSavedPosts();
+
+    // Load the likes number per each post: 
+    loadLikeCounts()
 });
