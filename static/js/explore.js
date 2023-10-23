@@ -64,10 +64,8 @@ function loadLikedPosts() {
 
                 // If the user is in the usersThatLikedPost array, it indicates they have liked the post before
                 if (usersThatLikedPost.includes(userInSession)) {
-                    button.css("background-color", "#fdd68f");
-                } 
-                
-                else {
+                    button.css("background-color", "#ff4c4c");  
+                } else {
                     button.css("background-color", "#FFA500");
                 }
             },
@@ -106,11 +104,9 @@ $(document).ready(function () {
 
                 // If the data is liked, it changes the colour to Yellow, if not, it removes the colour. 
                 if (data.liked) {
-                    button.css("background-color", "#fdd68f")
-                } 
-                
-                else {
-                    button.css("background-color", "#FFA500")
+                    button.css("background-color", "#ff4c4c");  
+                } else {
+                    button.css("background-color", "#FFA500");
                 }
             },
 
