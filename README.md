@@ -24,6 +24,20 @@ Artroam is a web application that empowers artists by providing a platform that 
 [Taskboard Sprint 2](https://github.com/orgs/software-students-fall2023/projects/31)
 
 ## Webapp Setup
+Firstly you must create a `.env` file within the directory of the cloned repository. Within this file you must include the following based on the values provided: 
+```
+MONGO_DBNAME
+MONGO_URI
+FLASK_APP
+FLASK_ENV
+GITHUB_SECRET
+GITHUB_REPO
+APP_SECRET_KEY
+AWS_SECRET_ACCESS_KEY
+AWS_ACCESS_KEY_ID
+BUCKET_NAME
+```
+
 1. Go to [AWS website](https://aws.amazon.com/cli/) and download AWS Command Line Interface based on your operating system.
 2. Go to terminal and type the following line:
 `aws configure`
