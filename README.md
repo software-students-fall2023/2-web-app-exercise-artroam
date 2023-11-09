@@ -50,7 +50,8 @@ Default output format: json
 ```
 4. Type the following line after setting up AWS:
 `pip install -r requirements.txt`
-5. Activate virtual environment:
+5. Create and Activate virtual environment:
+`python3 -m venv .venv`
 `source .venv/bin/activate`
 6. Run the app:
 `flask run`
