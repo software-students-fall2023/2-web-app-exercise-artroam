@@ -163,7 +163,6 @@ def save_post(post_id):
                 saved = False
             else:
                 favorites.insert(0, ObjectId(post_id))  # Add the post to favorites
-                print(favorites)
                 saved = True
             
             # Update the user's favorites array in the database
@@ -244,19 +243,19 @@ def gallery():
         print(f"An error occurred: {e}")
         return "Failed to submit post", 500
 
-# Handle unlike put request
-@app.put('/unlike/<string:post_id>')
+# Handle unsave_post put request
+@app.put('/unsave_post/<string:post_id>')
 def unlike_post(post_id):
     try:
         user_id = session.get('user_id')
         if user_id:
-            # update user's like
+            # update user's favorites
             current_user = get_user_by_id(user_id)
             if current_user.get('favorites') is not None and ObjectId(post_id) in current_user['favorites']:
                 database['users'].update_one({'_id': ObjectId(user_id)}, {'$pull': {'favorites': ObjectId(post_id)}})
-            # update post's like
-            unlike_post_by_id(post_id)
-
+                return jsonify({'data': 'Successfully unsaved the post.'})
+            else:
+                return jsonify({'error': 'Error unsaving the post'}, 404)
         return redirect(url_for('login'))
     
     except Exception as e:

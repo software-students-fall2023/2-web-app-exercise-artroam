@@ -22,6 +22,7 @@ Artroam is a web application that empowers artists by providing a platform that 
 ## Webapp Setup
 1. Go to [AWS website](https://aws.amazon.com/cli/) and download AWS Command Line Interface based on your operating system.
 2. Go to terminal and type the following line:
+
 `aws configure`
 3. Follow the prompt and provide values: 
 ```
@@ -31,6 +32,11 @@ Default region name: us-east-1
 Default output format: json
 ```
 4. Type the following line after setting up AWS:
+
 `pip install -r requirements.txt`
-5. Run the app:
+5. Activate virtual environment:
+
+`source .venv/bin/activate`
+6. Run the app:
+
 `flask run`

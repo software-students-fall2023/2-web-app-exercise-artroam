@@ -4,7 +4,7 @@
   padding: 1rem 1rem;
 }
 
-.gridItem {
+/* .gridItem {
   margin-bottom: 40px;
 }
 
@@ -36,6 +36,7 @@
 .artistContainer span {
   font-weight: 700;
 }
+
 
 .iconStats {
   width: 100px;
@@ -101,4 +102,34 @@
 
 #art_type::first-letter{
   text-transform: capitalize;
+} */
+
+/* .iconContainer {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.iconContainer span {
+  text-align: center;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.bookmarkBtn,
+.likeBtn {
+  padding: 5px;
+  margin: 3px;
+  font-size: 16px;
+  background-color: #FFA500;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+.bookmarkBtn i
+.likeBtn i {
+  font-size: 17px;
+  color: #fff;
+} */

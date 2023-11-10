@@ -36,14 +36,14 @@ function handleError(err) {
 }
 
 function bookmarkBtnOnClick() {
-  const bookmarkBtns = document.querySelectorAll('.bookmarkBtn');
+  const bookmarkBtns = document.querySelectorAll('#bookmarkBtn');
   bookmarkBtns.forEach((btn) => {
     const postId = btn.dataset.postId;
     btn.addEventListener('click', (evt) => {
       evt.preventDefault();
 
       $.ajax({
-        url: `/unlike/${postId}`,
+        url: `/unsave_post/${postId}`,
         type: 'PUT',
         success: (result) => {
           handleSuccess(btn);

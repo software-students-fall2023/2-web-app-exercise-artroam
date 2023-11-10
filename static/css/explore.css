@@ -112,9 +112,7 @@
 .artistContainer{
     display: flex;
     padding: 10px; 
-    /* justify-content: flex-start; */
     align-items: center;
-    /* float: left; */
 }
 
 .topContainer img {
