@@ -1,0 +1,68 @@
+.container{
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    font-size: 15px;
+}
+
+.ppImg{
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin: 0 auto 20px;
+    object-fit: cover; 
+}
+
+.user{
+    font-size: 15px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+
+.noPost{
+    font-size: 10px;
+    margin: 10px 0;
+}
+
+.btnContainer{
+    padding-top: 10px; 
+    text-align: center;
+}
+
+.btn{
+    background-color: #ffa500; 
+    color: #fff; 
+    border: none;
+    border-radius: 5px;
+    padding: 10px 50px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s;
+    margin: 0 10px;   
+}
+
+.deletePostButton {
+    font-size: 17px;
+    padding: 5px;
+    background-color: #f44336;  
+}
+
+#back-btn {
+    margin-left:20px; 
+    margin-top:20px; 
+    border: none;
+    color: #D47500;             
+    cursor: pointer;      
+    display: block;
+}

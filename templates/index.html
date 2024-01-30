@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block container %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+
+
+<div class="nav-container">
+    <div class="search_container">
+        <form action="{{url_for('search_posts')}}" method="get">
+            <input type="text" placeholder="Search..." name="search">
+            <button type="submit"><i class="material-icons">search</i></button>
+        </form>
+    </div>
+
+    <div class="filter_menu">
+        <button id="filterButton">Filter</button>
+        <ul class="filter_contents">
+            <li><a href="{{ url_for('home') }}">All</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='digital_art') }}">Digital Art</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='photography') }}">Photography</a></li>
+            <li><a href="{{ url_for('filter_posts', tag='visual_art') }}">Visual Art</a></li>            
+        </ul>
+    </div>
+</div>
+
+
+<!-- Main section which shows all the posts in the database-->
+<div class="posts-wrapper">
+<section>
+    {% if no_posts_found %}
+        <p style="display:flex; justify-content: center; align-items: center; margin-top: 50px;">No posts of this type at the moment</p>
+    {% else %}
+        {% if artworks %}
+            {% for artwork in artworks %}
+            <div class="postContainer">
+                <div class="topContainer">
+                    <div class="artistContainer">
+                        {% if artwork.avatar_url %}
+                        <img src="{{ artwork.avatar_url }}" alt="User Avatar">
+                        {% else %}
+                        <i class="material-icons">person</i>
+                        {% endif %}
+                        <span><a href="{{ url_for('user_profile', username=artwork.username) }}" style="color: black;">{{artwork.username}}</a></span>
+                    </div>
+
+                    <div class="statsContainer">
+                        <button name="saveButton" class="statsButton" data-post-id="{{ artwork._id }}"><i class="material-icons">bookmark</i></button>
+                        <button name="likeButton" class="statsButton" data-post-id="{{ artwork._id }}"><i class="material-icons">thumb_up</i></button>
+                        <span style="text-align: center;" class="like-count" data-post-id="{{ artwork._id }}">{{artwork.likes}}</span>
+                    </div>
+                </div>
+
+                <div class="artContainer">
+                    <img src="{{artwork.image_url}}">
+                </div>
+
+                <div class="detailsContainer">
+                    <div class="topDetailsContainer">
+                        <div id="post_title">{{ artwork.post_title }}</div>
+                        <div id="art_type">{{ artwork.art_type|replace("_", " ")|title() }}</div>  
+                    </div>
+                    <div id="post_description">{{ artwork.post_description }}</div>
+                </div>
+            </div>
+            {% endfor %}
+
+        <!-- If there are no images in the database or images under a specific tag, then it will display this -->
+        {% else %}
+        <p class="no-content-message">No posts created at the moment.</p>
+        {% endif %}
+    {% endif %}
+</section>
+</div>
+{% endblock %}
